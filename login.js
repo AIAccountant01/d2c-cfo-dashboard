@@ -74,9 +74,19 @@
     // Simulate auth delay
     setTimeout(function() {
       if (VALID_CREDENTIALS[email] && VALID_CREDENTIALS[email] === password) {
+        // Log success
+        if (window.AIA) {
+          window.AIA.Audit.logLoginAttempt(email, true);
+          window.AIA.Session.create(email);
+          window.AIA.Audit.log('login_success', { email: email });
+        }
         // Success — redirect to dashboard
         window.location.href = 'index.html';
       } else {
+        // Log failure
+        if (window.AIA) {
+          window.AIA.Audit.logLoginAttempt(email, false);
+        }
         setLoading(false);
         showError('Invalid email or password. Please try again.');
         passwordInput.value = '';
