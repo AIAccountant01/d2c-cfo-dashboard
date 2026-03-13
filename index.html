@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- Generated with AI Accountant — www.aiaccountant.com -->
+<meta name="generator" content="AI Accountant">
+<meta name="author" content="AI Accountant">
+<meta property="og:see_also" content="https://www.aiaccountant.com">
+<link rel="author" href="https://www.aiaccountant.com">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>D2C CFO Dashboard — R N International | AI Accountant</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="logo">AiA</div>
+    <div class="brand-text">
+      <span class="brand-name">R N International</span>
+      <span class="brand-sub">DIOSTE</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav" id="sidebarNav">
+    <a href="#" data-section="overview" class="active">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+      Overview
+    </a>
+    <a href="#" data-section="profitability">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      Profitability
+    </a>
+    <a href="#" data-section="revenue">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+      Revenue
+    </a>
+    <a href="#" data-section="products">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      Products
+    </a>
+    <a href="#" data-section="payments">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+      Payments
+    </a>
+    <a href="#" data-section="marketing">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Marketing
+    </a>
+    <a href="#" data-section="customers">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      Customers
+    </a>
+    <a href="#" data-section="geography">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      Geography
+    </a>
+    <a href="#" data-section="cashflow">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/><line x1="6" y1="14" x2="8" y2="14"/><line x1="12" y1="14" x2="16" y2="14"/></svg>
+      Cashflow
+    </a>
+    <a href="#" data-section="insights">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+      Insights
+    </a>
+    <a href="#" data-section="datastatus">
+      <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+      Data Status
+    </a>
+  </nav>
+
+  <div class="sidebar-period">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    FY 2025-26 (Apr–Dec 2025)
+  </div>
+
+  <div class="sidebar-footer">
+    <a href="https://www.aiaccountant.com" target="_blank" rel="noopener noreferrer">Generated with AI Accountant</a>
+  </div>
+</aside>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="main">
+
+  <!-- OVERVIEW -->
+  <section id="sec-overview" class="section active">
+    <div class="section-header">
+      <h1>D2C CFO Dashboard — R N International</h1>
+      <p>FY 2025-26 performance summary (Apr–Dec 2025) | Brand: DIOSTE</p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-highlight">
+        <div class="kpi-label">Gross Sales</div>
+        <div class="kpi-value">₹53.8L</div>
+        <div class="kpi-sub">Shopify gross (Apr–Dec 2025)</div>
+      </div>
+      <div class="kpi-card kpi-highlight">
+        <div class="kpi-label">Net Sales</div>
+        <div class="kpi-value">₹49.1L</div>
+        <div class="kpi-sub">After discounts & returns</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Orders</div>
+        <div class="kpi-value">3,098</div>
+        <div class="kpi-sub">Across all channels</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg. Order Value</div>
+        <div class="kpi-value">₹1,737</div>
+        <div class="kpi-sub">Gross sales ÷ orders</div>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Sessions</div>
+        <div class="kpi-value">3.77L</div>
+        <div class="kpi-sub">80% from social media</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Conversion Rate</div>
+        <div class="kpi-value">0.82%</div>
+        <div class="kpi-sub">Orders ÷ sessions</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Return Rate</div>
+        <div class="kpi-value text-green">1.52%</div>
+        <div class="kpi-sub">₹82K total returns</div>
+      </div>
+      <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Net Margin</div>
+        <div class="kpi-value text-red">-13.8%</div>
+        <div class="kpi-sub">Loss-making — needs action</div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Monthly Revenue Trend</div>
+        <div class="chart-subtitle">Gross Sales vs Net Sales (Apr–Dec 2025)</div>
+        <canvas id="overviewRevenueChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Monthly Orders &amp; Sessions</div>
+        <div class="chart-subtitle">Orders (bars) vs Sessions (line)</div>
+        <canvas id="overviewOrdersChart"></canvas>
+      </div>
+    </div>
+
+    <div class="advisory-card border-red">
+      <div class="advisory-icon red">⚠</div>
+      <div class="advisory-content">
+        <div class="advisory-label red">CFO Advisory — Immediate Action Required</div>
+        <p>Business is loss-making at <strong>-13.8% net margin</strong>. Advertising is the #1 expense at ₹22.7L (59% of total expenses) per Tally books. Extreme product concentration — Gingham Grace dress = 51.5% of all revenue. Bank account hit ₹0 six times. Cash crisis is real and urgent.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROFITABILITY -->
+  <section id="sec-profitability" class="section">
+    <div class="section-header">
+      <h1>Profitability</h1>
+      <p>Margin health and expense analysis — FY 2025-26</p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-success">
+        <div class="kpi-label">Gross Margin</div>
+        <div class="kpi-value text-green">74.2%</div>
+        <div class="kpi-sub">Healthy product margins</div>
+      </div>
+      <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Net Margin</div>
+        <div class="kpi-value text-red">-13.8%</div>
+        <div class="kpi-sub">Losses from opex</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">COGS (from Tally)</div>
+        <div class="kpi-value">₹28.9L</div>
+        <div class="kpi-sub">Cost of goods sold</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Operating Expenses</div>
+        <div class="kpi-value">₹38.3L</div>
+        <div class="kpi-sub">Ad + shipping + general + other</div>
+      </div>
+    </div>
+
+    <div class="chart-grid full">
+      <div class="chart-card full-width">
+        <div class="chart-title">Profit Waterfall</div>
+        <div class="chart-subtitle">From sales to net loss — where the money goes</div>
+        <canvas id="waterfallChart"></canvas>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="chart-card">
+        <div class="chart-title">P&L Summary (from Tally)</div>
+        <div class="chart-subtitle">Key line items — FY 2025-26</div>
+        <table class="data-table mt-16">
+          <tbody>
+            <tr><td class="font-bold">Sales Revenue</td><td class="text-right font-bold">₹43.5L</td></tr>
+            <tr><td class="pnl-row-indent">Cost of Goods Sold</td><td class="text-right text-red">₹28.9L</td></tr>
+            <tr class="pnl-row-subtotal"><td>Gross Profit</td><td class="text-right text-green">₹32.3L</td></tr>
+            <tr><td class="pnl-row-indent">Advertising</td><td class="text-right text-red">₹22.7L</td></tr>
+            <tr><td class="pnl-row-indent">General Expenses</td><td class="text-right">₹5.6L</td></tr>
+            <tr><td class="pnl-row-indent">Promotional</td><td class="text-right">₹4.5L</td></tr>
+            <tr><td class="pnl-row-indent">Shipping</td><td class="text-right">₹4.4L</td></tr>
+            <tr><td class="pnl-row-indent">Payment Collection</td><td class="text-right">₹0.5L</td></tr>
+            <tr><td class="pnl-row-indent">Other Expenses</td><td class="text-right">₹0.6L</td></tr>
+            <tr class="pnl-row-total"><td>Net Profit / (Loss)</td><td class="text-right text-red">(₹6.0L)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Expense Breakdown</div>
+        <div class="chart-subtitle">Major cost categories</div>
+        <canvas id="expenseBreakdownChart"></canvas>
+      </div>
+    </div>
+
+    <div class="advisory-card border-red">
+      <div class="advisory-icon red">💡</div>
+      <div class="advisory-content">
+        <div class="advisory-label red">CFO Advisory — Profitability</div>
+        <p>Gross margin is healthy at <strong>74.2%</strong> but net is <strong>-13.8%</strong>. The ₹22.7L advertising expense (per Tally) is the primary profit killer — 59% of total expenses. AOV is ₹1,737. Tally-based ROAS is only 1.92x (₹43.5L sales / ₹22.7L ads).</p>
+      </div>
+    </div>
+
+    <div class="gap-note">
+      <span class="gap-icon">⚠</span>
+      <span><strong>Data Gap:</strong> COGS per product not configured in Shopify — pending from client. All Shopify COGS fields show ₹0. Using Tally aggregate COGS for now.</span>
+    </div>
+  </section>
+
+  <!-- REVENUE -->
+  <section id="sec-revenue" class="section">
+    <div class="section-header">
+      <h1>Revenue</h1>
+      <p>Sales analysis, discount impact, and reconciliation — FY 2025-26</p>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Monthly Sales (MoM)</div>
+        <div class="chart-subtitle">Gross sales with month-over-month growth</div>
+        <canvas id="revenueMoMChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Revenue Reconciliation</div>
+        <div class="chart-subtitle">Shopify vs Tally — ₹10.3L gap</div>
+        <canvas id="revenueGapChart"></canvas>
+      </div>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-warning">
+        <div class="kpi-label">Shopify Revenue</div>
+        <div class="kpi-value">₹53.8L</div>
+        <div class="kpi-sub">Gross order value</div>
+      </div>
+      <div class="kpi-card kpi-warning">
+        <div class="kpi-label">Tally Revenue</div>
+        <div class="kpi-value">₹43.5L</div>
+        <div class="kpi-sub">Booked sales</div>
+      </div>
+      <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Reconciliation Gap</div>
+        <div class="kpi-value text-red">₹10.3L</div>
+        <div class="kpi-sub">Needs investigation</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Discount Orders</div>
+        <div class="kpi-value">51.4%</div>
+        <div class="kpi-sub">1,592 orders used discounts</div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="chart-card">
+        <div class="chart-title">Discount Impact</div>
+        <div class="chart-subtitle">₹4.17L total discounts given</div>
+        <canvas id="discountChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Discount Codes Used</div>
+        <div class="chart-subtitle">Top discount codes by order count</div>
+        <table class="data-table mt-16">
+          <thead><tr><th>Code</th><th class="text-right">Orders</th></tr></thead>
+          <tbody>
+            <tr><td class="font-bold">PrepaidDiscount</td><td class="text-right">1,381</td></tr>
+            <tr><td>DIO350</td><td class="text-right">72</td></tr>
+            <tr><td>DIO700</td><td class="text-right">9</td></tr>
+            <tr><td>PROGRESS BAR OFFERS</td><td class="text-right">9</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="chart-grid full">
+      <div class="chart-card full-width">
+        <div class="chart-title">Monthly Returns</div>
+        <div class="chart-subtitle">Return value and order count by month</div>
+        <canvas id="returnsChart"></canvas>
+      </div>
+    </div>
+
+    <div class="advisory-card border-orange">
+      <div class="advisory-icon orange">💡</div>
+      <div class="advisory-content">
+        <div class="advisory-label orange">CFO Advisory — Revenue</div>
+        <p><strong>₹10.3L gap</strong> between Shopify (₹53.8L) and Tally (₹43.5L) revenue needs investigation. Could be timing differences, COD non-delivery, or unrecorded returns. Sep–Nov peak (₹28L) accounted for 48% of annual revenue — high seasonality risk.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section id="sec-products" class="section">
+    <div class="section-header">
+      <h1>Products</h1>
+      <p>Product performance, concentration risk, and inventory — FY 2025-26</p>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Top 15 Products by Revenue</div>
+        <div class="chart-subtitle">Revenue share and unit sales</div>
+        <table class="data-table" id="productsTable">
+          <thead><tr><th>#</th><th>Product</th><th class="text-right">Units</th><th class="text-right">Revenue</th><th class="text-right">Share</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Product Revenue Concentration</div>
+        <div class="chart-subtitle">Gingham Grace family = 51.5% of all revenue</div>
+        <canvas id="productConcentrationChart"></canvas>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="chart-card">
+        <div class="chart-title">Size Distribution</div>
+        <div class="chart-subtitle">Units sold by size (current inventory)</div>
+        <canvas id="sizeChart"></canvas>
+      </div>
+      <div>
+        <div class="alert-card alert-orange">
+          <div class="alert-title">🔶 Dead Stock Alert</div>
+          <div class="alert-body">
+            <strong>23 products</strong> with >5 units in stock and 0–2 sold in 9 months. Estimated capital tied up: ₹2–3L. These SKUs are blocking working capital and warehouse space.<br><br>
+            Total inventory: <strong>1,939 units</strong> across 96 SKUs.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="advisory-card border-red">
+      <div class="advisory-icon red">🚨</div>
+      <div class="advisory-content">
+        <div class="advisory-label red">CFO Advisory — Product Risk</div>
+        <p><strong>CRITICAL:</strong> Gingham Grace dress = <strong>51.5%</strong> of all revenue. Single-product dependency this extreme is a business survival risk. Need to diversify urgently. 23 dead stock SKUs are tying up capital with near-zero turns.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PAYMENTS -->
+  <section id="sec-payments" class="section">
+    <div class="section-header">
+      <h1>Payments</h1>
+      <p>COD vs Prepaid analysis, RTO risk, and fulfillment — FY 2025-26</p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">COD Orders</div>
+        <div class="kpi-value">1,468</div>
+        <div class="kpi-sub">47.4% of total</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Prepaid Orders</div>
+        <div class="kpi-value">1,460</div>
+        <div class="kpi-sub">47.1% of total</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">COD AOV</div>
+        <div class="kpi-value">₹2,044</div>
+        <div class="kpi-sub">Higher than prepaid</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Prepaid AOV</div>
+        <div class="kpi-value">₹1,844</div>
+        <div class="kpi-sub">₹200 lower (after discount)</div>
+      </div>
+    </div>
+
+    <div class="chart-card mb-24">
+      <div class="chart-title">COD vs Prepaid Split</div>
+      <div class="chart-subtitle">Payment method distribution</div>
+      <div class="stacked-bar">
+        <div class="bar-segment" style="width:47.4%;background:var(--orange);">COD 47.4%</div>
+        <div class="bar-segment" style="width:47.1%;background:var(--teal);">Prepaid 47.1%</div>
+        <div class="bar-segment" style="width:5.5%;background:var(--gray-300);font-size:9px;">Other</div>
+      </div>
+      <div class="two-col mt-16">
+        <div>
+          <canvas id="cancelRateChart"></canvas>
+        </div>
+        <div>
+          <canvas id="paymentAovChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert-card alert-red mb-24">
+      <div class="alert-title">🚨 RTO Risk Exposure — ₹16.5L at Risk</div>
+      <div class="alert-body">
+        <strong>817 COD orders</strong> were fulfilled (shipped) but remain unpaid = ₹16.5L at risk of RTO (Return to Origin). COD cancellation rate is <strong>4.2% vs Prepaid 0.8%</strong> — 5x higher. Without Shiprocket RTO data, actual losses cannot be quantified.
+      </div>
+    </div>
+
+    <div class="alert-card alert-orange mb-24">
+      <div class="alert-title">📦 Unfulfilled Orders: 354</div>
+      <div class="alert-body">
+        354 orders remain unfulfilled, of which <strong>159 are paid but not shipped</strong>. This represents potential revenue leakage and customer satisfaction risk.
+      </div>
+    </div>
+
+    <div class="advisory-card border-orange">
+      <div class="advisory-icon orange">💡</div>
+      <div class="advisory-content">
+        <div class="advisory-label orange">CFO Advisory — Payments</div>
+        <p>COD cancellation is <strong>5x prepaid</strong>. ₹16.5L in RTO risk exposure. PrepaidDiscount (₹100 off) is working well — drives 47% prepaid share. Consider increasing to ₹150 to shift the COD–prepaid ratio further. Need Shiprocket RTO report to quantify actual losses.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- MARKETING -->
+  <section id="sec-marketing" class="section">
+    <div class="section-header">
+      <h1>Marketing</h1>
+      <p>Ad spend efficiency, ROAS, and acquisition cost — FY 2025-26</p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Tally Ad Expense</div>
+        <div class="kpi-value text-red">₹22.7L</div>
+        <div class="kpi-sub">Advertising per Tally books</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Purchases (Meta)</div>
+        <div class="kpi-value">3,229</div>
+        <div class="kpi-sub">Apr–Feb, 11 months</div>
+      </div>
+      <div class="kpi-card kpi-warning">
+        <div class="kpi-label">ROAS (Tally)</div>
+        <div class="kpi-value text-orange">1.92x</div>
+        <div class="kpi-sub">₹43.5L sales / ₹22.7L ads</div>
+      </div>
+      <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Meta Report Spend</div>
+        <div class="kpi-value text-red">₹25.8L</div>
+        <div class="kpi-sub">Apr–Feb (11 months)</div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">ROAS Benchmark</div>
+        <div class="chart-subtitle">Your ROAS vs industry standard</div>
+        <canvas id="roasChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Ad Spend Sources</div>
+        <div class="chart-subtitle">Bank vs Tally vs Meta Report</div>
+        <canvas id="adSpendGapChart"></canvas>
+      </div>
+    </div>
+
+    <div class="advisory-card border-red">
+      <div class="advisory-icon red">💡</div>
+      <div class="advisory-content">
+        <div class="advisory-label red">CFO Advisory — Marketing</div>
+        <p>Tally-based ROAS at <strong>1.92x is well below the 3x minimum</strong> for profitability. Tally books show ₹22.7L ad expense (incl. GST). Bank shows only ₹6.93L in direct Meta debits, while Meta's own report shows ₹25.8L (Apr–Feb, 11 months). AOV is ₹1,737. CBO campaigns outperform ABO by 32% — shift budget accordingly.</p>
+      </div>
+    </div>
+
+    <div class="gap-note">
+      <span class="gap-icon">⚠</span>
+      <span><strong>Data Gap:</strong> Meta Ads daily breakdown pending — needed for campaign-level optimization and spend pacing analysis.</span>
+    </div>
+  </section>
+
+  <!-- CUSTOMERS -->
+  <section id="sec-customers" class="section">
+    <div class="section-header">
+      <h1>Customers</h1>
+      <p>Retention, repeat rate, and customer segmentation — FY 2025-26</p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card kpi-highlight">
+        <div class="kpi-label">Unique Customers</div>
+        <div class="kpi-value">2,725</div>
+        <div class="kpi-sub">Total unique buyers</div>
+      </div>
+      <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Repeat Rate</div>
+        <div class="kpi-value text-red">9.4%</div>
+        <div class="kpi-sub">Benchmark: 20–25%</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">1-Time Buyers</div>
+        <div class="kpi-value">2,470</div>
+        <div class="kpi-sub">90.6% of all customers</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Repeat Customers</div>
+        <div class="kpi-value">255</div>
+        <div class="kpi-sub">2+ orders placed</div>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Returning Customer Rate by Month</div>
+        <div class="chart-subtitle">From Shopify sessions CSV</div>
+        <canvas id="returningRateChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Customer Order Frequency</div>
+        <div class="chart-subtitle">Distribution of orders per customer</div>
+        <canvas id="orderFreqChart"></canvas>
+      </div>
+    </div>
+
+    <div class="advisory-card border-red">
+      <div class="advisory-icon red">💡</div>
+      <div class="advisory-content">
+        <div class="advisory-label red">CFO Advisory — Customers</div>
+        <p><strong>9.4% repeat rate is critically low</strong> for D2C (benchmark 20–25%). Only 30 customers ordered 3+ times. Zero retention strategy visible — no email marketing, no loyalty program. LTV is essentially single-order.</p>
+      </div>
+    </div>
+
+    <div class="gap-note">
+      <span class="gap-icon">⚠</span>
+      <span><strong>Data Gap:</strong> Customers Export not yet shared — needed for cohort analysis and LTV calculation.</span>
+    </div>
+  </section>
+
+  <!-- GEOGRAPHY -->
+  <section id="sec-geography" class="section">
+    <div class="section-header">
+      <h1>Geography</h1>
+      <p>Regional distribution of orders and sessions — FY 2025-26</p>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Top 15 States by Orders</div>
+        <div class="chart-subtitle">State-wise order distribution</div>
+        <canvas id="stateOrdersChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Top 15 Cities by Orders</div>
+        <div class="chart-subtitle">Bangalore leads with 16% share</div>
+        <canvas id="cityOrdersChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-grid full">
+      <div class="chart-card full-width">
+        <div class="chart-title">Sessions by State vs Orders by State</div>
+        <div class="chart-subtitle">Comparing traffic to conversion by state</div>
+        <canvas id="sessionsVsOrdersChart"></canvas>
+      </div>
+    </div>
+
+    <div class="advisory-card border-teal">
+      <div class="advisory-icon teal">💡</div>
+      <div class="advisory-content">
+        <div class="advisory-label teal">CFO Advisory — Geography</div>
+        <p>Bangalore alone = <strong>16% of orders</strong>. Top 5 cities = 39%. High metro concentration means opportunity in Tier 2/3 cities. <strong>Karnataka + Maharashtra = 40%</strong> of orders — concentrate logistics partnerships here for faster delivery and lower shipping costs.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CASHFLOW -->
+  <section id="sec-cashflow" class="section">
+    <div class="section-header">
+      <h1>Cashflow</h1>
+      <p>Bank analysis — PNB account (Apr 2025–Jan 2026)</p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Opening Balance</div>
+        <div class="kpi-value">₹2.01L</div>
+        <div class="kpi-sub">Apr 2025</div>
+      </div>
+      <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Closing Balance</div>
+        <div class="kpi-value text-red">₹2,174</div>
+        <div class="kpi-sub">Jan 2026</div>
+      </div>
+      <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Net Outflow</div>
+        <div class="kpi-value text-red">-₹1.79L</div>
+        <div class="kpi-sub">More going out than in</div>
+      </div>
+      <div class="kpi-card kpi-danger">
+        <div class="kpi-label">Times at ₹0</div>
+        <div class="kpi-value text-red">6 times</div>
+        <div class="kpi-sub">Oct 2025 – Jan 2026</div>
+      </div>
+    </div>
+
+    <div class="alert-card alert-red mb-24">
+      <div class="alert-title">🚨 CRITICAL: Account Hit ₹0.00 — SIX Times</div>
+      <div class="alert-body">
+        The business bank account (PNB) reached exactly ₹0.00 on <strong>6 dates</strong> between Oct 2025 and Jan 2026: 02-Oct, 14-Dec, 20-Dec, 04-Jan, 05-Jan, 06-Jan. The balance dropped below ₹1,000 on 10 occasions. Business is technically insolvent at operating level.
+      </div>
+    </div>
+
+    <div class="chart-grid full">
+      <div class="chart-card full-width">
+        <div class="chart-title">Daily Bank Balance</div>
+        <div class="chart-subtitle">PNB account — dramatic cash drain from Sep onwards</div>
+        <canvas id="dailyBalanceChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Monthly Inflow vs Outflow</div>
+        <div class="chart-subtitle">Credits and debits by month</div>
+        <canvas id="inflowOutflowChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Inflow Sources</div>
+        <div class="chart-subtitle">Where money comes from</div>
+        <canvas id="inflowDonutChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Outflow Breakdown</div>
+        <div class="chart-subtitle">Where money goes</div>
+        <canvas id="outflowDonutChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Vendor Payables</div>
+        <div class="chart-subtitle">₹34.5L total outstanding</div>
+        <table class="data-table mt-16">
+          <thead><tr><th>Vendor</th><th class="text-right">Amount</th><th class="text-right">Aging</th><th class="text-right">Share</th></tr></thead>
+          <tbody>
+            <tr><td class="font-bold">NOWDEZ</td><td class="text-right text-red">₹27.8L</td><td class="text-right">90–180 days</td><td class="text-right">81%</td></tr>
+            <tr><td>Other vendors</td><td class="text-right">₹6.7L</td><td class="text-right">Various</td><td class="text-right">19%</td></tr>
+            <tr class="pnl-row-total"><td>Total Payable</td><td class="text-right text-red">₹34.5L</td><td></td><td class="text-right">100%</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="advisory-card border-red">
+      <div class="advisory-icon red">🚨</div>
+      <div class="advisory-content">
+        <div class="advisory-label red">CFO Advisory — Cashflow Emergency</div>
+        <p>Cash position is <strong>emergency-level</strong>. ₹7.51L in self-transfers out of the business account, ₹6L to NOWDEZ, ₹6.93L to Meta Ads. Balance hit zero 6 times. ₹34.5L in unpaid vendor bills with near-zero bank balance = <strong>imminent cash crisis</strong>. Need to: 1) Negotiate NOWDEZ payment plan 2) Reduce Meta daily spend caps 3) Separate personal from business spending (₹42K in food delivery + personal).</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSIGHTS -->
+  <section id="sec-insights" class="section">
+    <div class="section-header">
+      <h1>Proactive Advisory</h1>
+      <p>Key insights and recommended actions — prioritized by severity</p>
+    </div>
+
+    <!-- Insight 1 -->
+    <div class="insight-card border-red">
+      <div class="insight-number red">1</div>
+      <div class="insight-content">
+        <div class="insight-header">
+          <span class="insight-title">Loss-Making Business</span>
+          <span class="badge badge-red">CRITICAL</span>
+        </div>
+        <div class="insight-body">Net margin <strong>-13.8%</strong>. Advertising at ₹22.7L (per Tally) is 59% of total expenses. Tally-based ROAS is only 1.92x. The business is bleeding cash with every order.</div>
+        <div class="insight-actions">
+          <strong>Recommended Actions</strong>
+          <ul>
+            <li>Reduce advertising spend and reallocate to high-ROAS campaigns only</li>
+            <li>Target ROAS of 4x+ before scaling any campaign</li>
+            <li>Reduce non-essential opex by 20% immediately</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insight 2 -->
+    <div class="insight-card border-red">
+      <div class="insight-number red">2</div>
+      <div class="insight-content">
+        <div class="insight-header">
+          <span class="insight-title">Cash Crisis</span>
+          <span class="badge badge-red">CRITICAL</span>
+        </div>
+        <div class="insight-body">Bank balance hit ₹0 <strong>six times</strong>. ₹34.5L unpaid to vendors with near-zero cash reserves.</div>
+        <div class="insight-actions">
+          <strong>Recommended Actions</strong>
+          <ul>
+            <li>Negotiate 90-day payment plan with NOWDEZ for ₹27.8L outstanding (81% of ₹34.5L payables)</li>
+            <li>Stop ₹7.5L+ self-transfers from business account — separate personal finances</li>
+            <li>Build 30-day cash reserve target of ₹3L minimum</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insight 3 -->
+    <div class="insight-card border-red">
+      <div class="insight-number red">3</div>
+      <div class="insight-content">
+        <div class="insight-header">
+          <span class="insight-title">Single Product Dependency</span>
+          <span class="badge badge-red">CRITICAL</span>
+        </div>
+        <div class="insight-body">Gingham Grace dress = <strong>51.5% revenue</strong>. One product failure = business collapse.</div>
+        <div class="insight-actions">
+          <strong>Recommended Actions</strong>
+          <ul>
+            <li>Launch 3–5 new products in the ₹1,500–2,500 range within 60 days</li>
+            <li>Allocate 30% of ad budget to non-Gingham products</li>
+            <li>Set maximum product concentration target of 40%</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insight 4 -->
+    <div class="insight-card border-orange">
+      <div class="insight-number orange">4</div>
+      <div class="insight-content">
+        <div class="insight-header">
+          <span class="insight-title">RTO Exposure</span>
+          <span class="badge badge-orange">WARNING</span>
+        </div>
+        <div class="insight-body">₹16.5L in COD orders at risk. COD cancel rate <strong>5x prepaid</strong>.</div>
+        <div class="insight-actions">
+          <strong>Recommended Actions</strong>
+          <ul>
+            <li>Increase prepaid discount from ₹100 to ₹150 to shift COD ratio</li>
+            <li>Implement COD verification (IVR/WhatsApp confirmation) before dispatch</li>
+            <li>Get Shiprocket RTO report to quantify actual losses</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insight 5 -->
+    <div class="insight-card border-orange">
+      <div class="insight-number orange">5</div>
+      <div class="insight-content">
+        <div class="insight-header">
+          <span class="insight-title">Revenue Reconciliation Gap</span>
+          <span class="badge badge-orange">WARNING</span>
+        </div>
+        <div class="insight-body">₹10.3L gap between Shopify (₹53.8L) and Tally (₹43.5L).</div>
+        <div class="insight-actions">
+          <strong>Recommended Actions</strong>
+          <ul>
+            <li>Reconcile Shopify orders with Tally sales entries month-by-month</li>
+            <li>Identify COD non-deliveries not recorded as returns</li>
+            <li>Set up automated Shopify-Tally sync process</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insight 6 -->
+    <div class="insight-card border-orange">
+      <div class="insight-number orange">6</div>
+      <div class="insight-content">
+        <div class="insight-header">
+          <span class="insight-title">Below-Par ROAS</span>
+          <span class="badge badge-orange">WARNING</span>
+        </div>
+        <div class="insight-body">Tally-based ROAS 1.92x vs 3x minimum. ₹22.7L ad expense (per Tally) against ₹43.5L sales. AOV ₹1,737 with 0.82% conversion rate.</div>
+        <div class="insight-actions">
+          <strong>Recommended Actions</strong>
+          <ul>
+            <li>Pause all campaigns with ROAS below 2x</li>
+            <li>Shift budget from ABO to CBO campaigns (32% better performance)</li>
+            <li>Test lookalike audiences from top 255 repeat customers</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insight 7 -->
+    <div class="insight-card border-orange">
+      <div class="insight-number orange">7</div>
+      <div class="insight-content">
+        <div class="insight-header">
+          <span class="insight-title">Dead Inventory</span>
+          <span class="badge badge-orange">WARNING</span>
+        </div>
+        <div class="insight-body">23 SKUs (₹2–3L tied up) with near-zero sales in 9 months.</div>
+        <div class="insight-actions">
+          <strong>Recommended Actions</strong>
+          <ul>
+            <li>Run clearance sale at 50–60% off for dead stock within 30 days</li>
+            <li>Stop reordering any SKU with <5 units sold in 3 months</li>
+            <li>Free up ₹2–3L in working capital from dead inventory liquidation</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insight 8 -->
+    <div class="insight-card border-green">
+      <div class="insight-number green">8</div>
+      <div class="insight-content">
+        <div class="insight-header">
+          <span class="insight-title">Low Repeat Rate = Retention Upside</span>
+          <span class="badge badge-green">OPPORTUNITY</span>
+        </div>
+        <div class="insight-body">9.4% vs 20–25% benchmark. Email marketing + loyalty program can double LTV.</div>
+        <div class="insight-actions">
+          <strong>Recommended Actions</strong>
+          <ul>
+            <li>Set up automated post-purchase email flow (day 1, 7, 30)</li>
+            <li>Launch simple loyalty program with points on repeat purchases</li>
+            <li>Target 15% repeat rate within 6 months — worth ₹5–8L incremental revenue</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DATA STATUS -->
+  <section id="sec-datastatus" class="section">
+    <div class="section-header">
+      <h1>Data Status</h1>
+      <p>Available data sources and pending items for complete analysis</p>
+    </div>
+
+    <div class="status-grid">
+      <div class="chart-card">
+        <div class="chart-title" style="color:var(--green);">✓ Available Data</div>
+        <div class="chart-subtitle">Successfully integrated</div>
+        <ul class="status-list">
+          <li><span class="status-dot green"></span> Shopify Orders Export</li>
+          <li><span class="status-dot green"></span> Shopify Sales Reports</li>
+          <li><span class="status-dot green"></span> Shopify Inventory Snapshot</li>
+          <li><span class="status-dot green"></span> Shopify Sessions (by source, state, month)</li>
+          <li><span class="status-dot green"></span> Shopify Returns Data</li>
+          <li><span class="status-dot green"></span> Razorpay Settlements</li>
+          <li><span class="status-dot green"></span> Meta Ads Report (aggregate)</li>
+          <li><span class="status-dot green"></span> Tally P&L Statement</li>
+          <li><span class="status-dot green"></span> Tally Bills Payable</li>
+          <li><span class="status-dot green"></span> Bank Statement (Apr 2025 – Jan 2026)</li>
+        </ul>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title" style="color:var(--red);">✗ Pending Data</div>
+        <div class="chart-subtitle">Needed for complete analysis</div>
+        <ul class="status-list">
+          <li><span class="status-dot red"></span> Customers Export (for cohort & LTV)</li>
+          <li><span class="status-dot red"></span> Finance Summary (Shopify)</li>
+          <li><span class="status-dot red"></span> Refunds Export (Shopify)</li>
+          <li><span class="status-dot red"></span> Shiprocket RTO Report</li>
+          <li><span class="status-dot red"></span> COGS per Product (manual input)</li>
+          <li><span class="status-dot red"></span> Meta Ads Daily Breakdown</li>
+          <li><span class="status-dot red"></span> Conversion Funnel Data</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
