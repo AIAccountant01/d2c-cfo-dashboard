@@ -264,7 +264,7 @@ function populateDashboard(data) {
   setText('kpi-metaSpend', mkt.kpis.metaSpend);
   setText('kpi-metaSpendSub', mkt.kpis.metaSpendSub);
   setHTML('marketing-advisory', mkt.advisory);
-  setText('marketing-dataGap', mkt.dataGap);
+  setHTML('marketing-dataGap', mkt.dataGap);
 
   // ===== CUSTOMERS =====
   var cust = data.customers;

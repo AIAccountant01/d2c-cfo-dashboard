@@ -332,6 +332,98 @@
     }
   });
 
+  // ===== CHANGE PASSWORD =====
+  var cpOverlay = document.getElementById('changePwdOverlay');
+  var cpForm = document.getElementById('changePwdForm');
+  var cpClose = document.getElementById('changePwdClose');
+  var cpBtn = document.getElementById('changePasswordBtn');
+  var cpError = document.getElementById('cpError');
+  var cpErrorMsg = document.getElementById('cpErrorMsg');
+  var cpSuccess = document.getElementById('cpSuccess');
+
+  function openChangePwd() {
+    if (cpOverlay) {
+      cpOverlay.style.display = 'flex';
+      cpError.style.display = 'none';
+      cpSuccess.style.display = 'none';
+      cpForm.reset();
+    }
+  }
+  function closeChangePwd() {
+    if (cpOverlay) cpOverlay.style.display = 'none';
+  }
+
+  if (cpBtn) cpBtn.addEventListener('click', openChangePwd);
+  if (cpClose) cpClose.addEventListener('click', closeChangePwd);
+  if (cpOverlay) cpOverlay.addEventListener('click', function(e) {
+    if (e.target === cpOverlay) closeChangePwd();
+  });
+
+  if (cpForm) {
+    cpForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      cpError.style.display = 'none';
+      cpSuccess.style.display = 'none';
+
+      var currentPwd = document.getElementById('cpCurrentPwd').value;
+      var newPwd = document.getElementById('cpNewPwd').value;
+      var confirmPwd = document.getElementById('cpConfirmPwd').value;
+
+      if (!currentPwd || !newPwd || !confirmPwd) {
+        cpErrorMsg.textContent = 'All fields are required.';
+        cpError.style.display = 'block';
+        return;
+      }
+      if (newPwd.length < 6) {
+        cpErrorMsg.textContent = 'New password must be at least 6 characters.';
+        cpError.style.display = 'block';
+        return;
+      }
+      if (newPwd !== confirmPwd) {
+        cpErrorMsg.textContent = 'New passwords do not match.';
+        cpError.style.display = 'block';
+        return;
+      }
+
+      var token = window.AIA && window.AIA.Session.getToken();
+      var submitBtn = document.getElementById('cpSubmitBtn');
+      submitBtn.textContent = 'Updating...';
+      submitBtn.disabled = true;
+
+      fetch('/api/change-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({ currentPassword: currentPwd, newPassword: newPwd })
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        submitBtn.textContent = 'Update Password';
+        submitBtn.disabled = false;
+        if (data.success) {
+          cpSuccess.style.display = 'block';
+          cpForm.reset();
+          if (data.token && window.AIA) {
+            window.AIA.Session.setToken(data.token);
+          }
+          if (window.AIA) window.AIA.Audit.log('password_changed', {});
+          setTimeout(closeChangePwd, 2000);
+        } else {
+          cpErrorMsg.textContent = data.error || 'Failed to change password.';
+          cpError.style.display = 'block';
+        }
+      })
+      .catch(function() {
+        submitBtn.textContent = 'Update Password';
+        submitBtn.disabled = false;
+        cpErrorMsg.textContent = 'Network error. Please try again.';
+        cpError.style.display = 'block';
+      });
+    });
+  }
+
   // ===== HELPER: RELATIVE TIME =====
   function formatRelative(date) {
     const now = new Date();

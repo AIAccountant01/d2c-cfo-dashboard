@@ -7,7 +7,8 @@ const JWT_SECRET = 'aia-cfo-2026-sk';
 const VALID_CREDENTIALS = {
   'help@aiaccountant.com': { password: 'aiaccountant2026', name: 'Help', role: 'Admin' },
   'demo@aiaccountant.com': { password: 'demo2026', name: 'Demo', role: 'Viewer' },
-  'admin@aiaccountant.com': { password: 'admin2026', name: 'Admin', role: 'Admin' }
+  'admin@aiaccountant.com': { password: 'admin2026', name: 'Admin', role: 'Admin' },
+  'ronit@aiaccountant.com': { password: 'ronit@123', name: 'Ronit', role: 'Admin' }
 };
 
 function setCors(res) {
