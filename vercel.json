@@ -2,19 +2,14 @@
   "version": 2,
   "name": "d2c-cfo-dashboard",
   "builds": [
-    {
-      "src": "**/*",
-      "use": "@vercel/static"
-    }
+    { "src": "api/**/*.js", "use": "@vercel/node" },
+    { "src": "*.html", "use": "@vercel/static" },
+    { "src": "*.css", "use": "@vercel/static" },
+    { "src": "*.js", "use": "@vercel/static", "config": { "exclude": ["api/**"] } }
   ],
   "routes": [
-    {
-      "src": "^/$",
-      "dest": "/login.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
-    }
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "^/$", "dest": "/login.html" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }

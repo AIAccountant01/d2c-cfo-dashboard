@@ -15,6 +15,7 @@
   if (!window.__aiaStore) {
     window.__aiaStore = {
       session: null,
+      token: null,
       auditLog: [],
       loginAttempts: []
     };
@@ -24,7 +25,7 @@
 
   // ===== SESSION MANAGEMENT =====
   const SessionManager = {
-    create(email) {
+    create(email, token) {
       const session = {
         email: email,
         displayName: email.split('@')[0].replace(/[._]/g, ' ').replace(/\b\w/g, c => c.toUpperCase()),
@@ -34,9 +35,24 @@
         isActive: true
       };
       store.session = session;
-      // Also store in a way that survives page navigation
-      try { window.name = JSON.stringify({ session: session, auditLog: store.auditLog, loginAttempts: store.loginAttempts }); } catch(e) {}
+      if (token) store.token = token;
+      this._persist();
       return session;
+    },
+
+    setToken(token) {
+      store.token = token;
+      this._persist();
+    },
+
+    getToken() {
+      if (!store.token && window.name) {
+        try {
+          const data = JSON.parse(window.name);
+          if (data && data.token) store.token = data.token;
+        } catch(e) {}
+      }
+      return store.token;
     },
 
     get() {
@@ -46,6 +62,7 @@
           const data = JSON.parse(window.name);
           if (data && data.session && data.session.isActive) {
             store.session = data.session;
+            store.token = data.token || null;
             store.auditLog = data.auditLog || [];
             store.loginAttempts = data.loginAttempts || [];
           }
@@ -81,12 +98,13 @@
         AuditLog.log('logout', { reason: reason || 'manual', email: store.session.email });
         store.session.isActive = false;
         store.session = null;
+        store.token = null;
         this._persist();
       }
     },
 
     _persist() {
-      try { window.name = JSON.stringify({ session: store.session, auditLog: store.auditLog, loginAttempts: store.loginAttempts }); } catch(e) {}
+      try { window.name = JSON.stringify({ session: store.session, token: store.token, auditLog: store.auditLog, loginAttempts: store.loginAttempts }); } catch(e) {}
     },
 
     getTimeRemaining() {

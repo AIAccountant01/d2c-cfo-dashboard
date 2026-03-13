@@ -1,51 +1,5 @@
-// ===== NAV LOGIC =====
-document.addEventListener('DOMContentLoaded', function() {
-  const navLinks = document.querySelectorAll('#sidebarNav a');
-  const sections = document.querySelectorAll('.section');
-
-  navLinks.forEach(link => {
-    link.addEventListener('click', function(e) {
-      e.preventDefault();
-      const target = this.dataset.section;
-
-      navLinks.forEach(l => l.classList.remove('active'));
-      this.classList.add('active');
-
-      sections.forEach(s => s.classList.remove('active'));
-      document.getElementById('sec-' + target).classList.add('active');
-
-      // Trigger resize on all chart canvases in this section
-      setTimeout(() => {
-        const sec = document.getElementById('sec-' + target);
-        sec.querySelectorAll('canvas').forEach(c => {
-          const chart = Chart.getChart(c);
-          if (chart) { chart.resize(); chart.update(); }
-        });
-      }, 50);
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-  });
-
-  // Show all sections briefly to init charts, then hide
-  sections.forEach(s => s.style.display = 'block');
-  initOverviewCharts();
-  initProfitabilityCharts();
-  initRevenueCharts();
-  initProductCharts();
-  initPaymentCharts();
-  initMarketingCharts();
-  initCustomerCharts();
-  initGeographyCharts();
-  initCashflowCharts();
-  // Reset sections — only overview visible
-  sections.forEach(s => s.style.display = '');
-  // Force resize overview
-  document.querySelectorAll('#sec-overview canvas').forEach(c => {
-    const chart = Chart.getChart(c);
-    if (chart) chart.resize();
-  });
-});
+// ===== AI ACCOUNTANT — DASHBOARD APP ===== //
+// Fetches data from /api/data and populates the entire dashboard
 
 // ===== CHART DEFAULTS =====
 Chart.defaults.font.family = "'Inter', sans-serif";
@@ -66,7 +20,7 @@ Chart.defaults.elements.point.hoverRadius = 5;
 Chart.defaults.scale.grid.color = '#f3f4f6';
 
 // ===== COLORS =====
-const C = {
+var C = {
   teal: '#17b5a3',
   tealLight: 'rgba(23,181,163,0.12)',
   orange: '#f59e0b',
@@ -83,36 +37,380 @@ const C = {
   pink: '#ec4899',
 };
 
-// ===== DATA =====
-const months = ['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-const grossSales = [346441, 175501, 261863, 551440, 533735, 854058, 825433, 929292, 902597];
-const totalSalesWithTax = [368519, 184080, 256461, 582845, 553901, 872345, 897867, 1032356, 977593];
-const netSales = [316677,157121,220922,501683,476425,749055,770932,885067,835101];
-const orders = [217,104,160,313,308,511,453,525,507];
-const sessions = [31219,12919,14204,25517,28882,47963,70650,66962,78365];
-
 // ===== HELPER: Format INR =====
 function fmtINR(val) {
-  if (val >= 100000) return '₹' + (val/100000).toFixed(1) + 'L';
-  if (val >= 1000) return '₹' + (val/1000).toFixed(1) + 'K';
-  return '₹' + val.toLocaleString('en-IN');
+  if (val >= 100000) return '\u20B9' + (val/100000).toFixed(1) + 'L';
+  if (val >= 1000) return '\u20B9' + (val/1000).toFixed(1) + 'K';
+  return '\u20B9' + val.toLocaleString('en-IN');
 }
 
 function fmtNum(val) {
   return val.toLocaleString('en-IN');
 }
 
+// ===== WATERFALL COLOR MAP =====
+var waterfallColorMap = {
+  teal: C.teal,
+  green: C.green,
+  red: C.red,
+  redLight: '#fca5a5'
+};
+
+// ===== NAV LOGIC =====
+document.addEventListener('DOMContentLoaded', function() {
+  var navLinks = document.querySelectorAll('#sidebarNav a');
+  var sections = document.querySelectorAll('.section');
+
+  navLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var target = this.dataset.section;
+
+      navLinks.forEach(function(l) { l.classList.remove('active'); });
+      this.classList.add('active');
+
+      sections.forEach(function(s) { s.classList.remove('active'); });
+      document.getElementById('sec-' + target).classList.add('active');
+
+      setTimeout(function() {
+        var sec = document.getElementById('sec-' + target);
+        sec.querySelectorAll('canvas').forEach(function(c) {
+          var chart = Chart.getChart(c);
+          if (chart) { chart.resize(); chart.update(); }
+        });
+      }, 50);
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  // Fetch dashboard data
+  fetchDashboardData();
+});
+
+// ===== FETCH DATA =====
+function fetchDashboardData() {
+  var token = window.AIA && window.AIA.Session.getToken();
+  if (!token) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  fetch('/api/data', {
+    method: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + token,
+      'Content-Type': 'application/json'
+    }
+  })
+  .then(function(res) {
+    if (res.status === 401) {
+      window.location.href = 'login.html';
+      throw new Error('Unauthorized');
+    }
+    return res.json();
+  })
+  .then(function(data) {
+    populateDashboard(data);
+  })
+  .catch(function(err) {
+    if (err.message !== 'Unauthorized') {
+      console.error('Failed to load dashboard data:', err);
+    }
+  });
+}
+
+// ===== POPULATE DASHBOARD =====
+function populateDashboard(data) {
+  var sections = document.querySelectorAll('.section');
+
+  // Set text helper
+  function setText(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.textContent = val;
+  }
+  function setHTML(id, val) {
+    var el = document.getElementById(id);
+    if (el) el.innerHTML = val;
+  }
+
+  // ===== OVERVIEW =====
+  var ov = data.overview;
+  setText('kpi-grossSales', ov.kpis.grossSales);
+  setText('kpi-grossSalesSub', ov.kpis.grossSalesSub);
+  setText('kpi-netSales', ov.kpis.netSales);
+  setText('kpi-netSalesSub', ov.kpis.netSalesSub);
+  setText('kpi-totalOrders', ov.kpis.totalOrders);
+  setText('kpi-totalOrdersSub', ov.kpis.totalOrdersSub);
+  setText('kpi-aov', ov.kpis.aov);
+  setText('kpi-aovSub', ov.kpis.aovSub);
+  setText('kpi-totalSessions', ov.kpis.totalSessions);
+  setText('kpi-sessionsSub', ov.kpis.sessionsSub);
+  setText('kpi-conversionRate', ov.kpis.conversionRate);
+  setText('kpi-conversionSub', ov.kpis.conversionSub);
+  setText('kpi-returnRate', ov.kpis.returnRate);
+  setText('kpi-returnRateSub', ov.kpis.returnRateSub);
+  setText('kpi-netMargin', ov.kpis.netMargin);
+  setText('kpi-netMarginSub', ov.kpis.netMarginSub);
+  setHTML('overview-advisory', ov.summary);
+
+  // ===== PROFITABILITY =====
+  var prof = data.profitability;
+  setText('kpi-grossMargin', prof.kpis.grossMargin);
+  setText('kpi-grossMarginSub', prof.kpis.grossMarginSub);
+  setText('kpi-profitNetMargin', prof.kpis.netMargin);
+  setText('kpi-profitNetMarginSub', prof.kpis.netMarginSub);
+  setText('kpi-cogs', prof.kpis.cogs);
+  setText('kpi-cogsSub', prof.kpis.cogsSub);
+  setText('kpi-totalExpenses', prof.kpis.totalExpenses);
+  setText('kpi-totalExpensesSub', prof.kpis.totalExpensesSub);
+
+  // P&L table
+  var pnlTbody = document.querySelector('#pnlTable tbody');
+  if (pnlTbody) {
+    pnlTbody.innerHTML = '';
+    prof.pnl.forEach(function(row) {
+      var tr = document.createElement('tr');
+      var cls = '';
+      if (row.type === 'total') cls = 'pnl-row-total';
+      else if (row.type === 'subtotal') cls = 'pnl-row-subtotal';
+      else if (row.type === 'indent') cls = 'pnl-row-indent';
+      else if (row.type === 'bold') cls = 'pnl-row-bold';
+      tr.className = cls;
+      tr.innerHTML = '<td>' + row.label + '</td><td class="text-right ' + (row.class || '') + '">' + row.value + '</td>';
+      pnlTbody.appendChild(tr);
+    });
+  }
+
+  setHTML('profitability-advisory', prof.advisory);
+  setText('profitability-dataGap', prof.dataGap);
+
+  // ===== REVENUE =====
+  var rev = data.revenue;
+  setText('kpi-shopifyRevenue', rev.kpis.shopifyRevenue);
+  setText('kpi-shopifyRevenueSub', rev.kpis.shopifyRevenueSub);
+  setText('kpi-tallyRevenue', rev.kpis.tallyRevenue);
+  setText('kpi-tallyRevenueSub', rev.kpis.tallyRevenueSub);
+  setText('kpi-revenueGap', rev.kpis.gap);
+  setText('kpi-revenueGapSub', rev.kpis.gapSub);
+  setText('kpi-discountPct', rev.kpis.discountPct);
+  setText('kpi-discountPctSub', rev.kpis.discountPctSub);
+  setText('revenue-gapChartSub', 'Shopify vs Tally \u2014 ' + rev.kpis.gap + ' gap');
+  setText('revenue-discountSub', rev.totalDiscounts + ' total discounts given');
+
+  // Discount codes table
+  var dcTbody = document.querySelector('#discountCodesTable tbody');
+  if (dcTbody) {
+    dcTbody.innerHTML = '';
+    rev.discountCodes.forEach(function(dc, i) {
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td' + (i === 0 ? ' class="font-bold"' : '') + '>' + dc.code + '</td><td class="text-right">' + dc.orders + '</td>';
+      dcTbody.appendChild(tr);
+    });
+  }
+
+  setHTML('revenue-advisory', rev.advisory);
+
+  // ===== PRODUCTS =====
+  var prod = data.products;
+  setText('products-concentrationSub', prod.concentrationSub);
+  setHTML('products-deadStockAlert', prod.deadStockAlert);
+  setHTML('products-inventoryNote', prod.inventoryNote);
+  setHTML('products-advisory', prod.advisory);
+
+  // Products table
+  var prodTbody = document.querySelector('#productsTable tbody');
+  if (prodTbody) {
+    prodTbody.innerHTML = '';
+    prod.items.forEach(function(p, i) {
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td>' + (i+1) + '</td><td class="' + (i === 0 ? 'font-bold' : '') + '">' + p.name + '</td><td class="text-right">' + fmtNum(p.units) + '</td><td class="text-right">' + fmtINR(p.revenue) + '</td><td class="text-right font-bold">' + p.share + '%</td>';
+      prodTbody.appendChild(tr);
+    });
+  }
+
+  // ===== PAYMENTS =====
+  var pay = data.payments;
+  setText('kpi-codOrders', pay.kpis.codOrders);
+  setText('kpi-codOrdersSub', pay.kpis.codSub);
+  setText('kpi-prepaidOrders', pay.kpis.prepaidOrders);
+  setText('kpi-prepaidOrdersSub', pay.kpis.prepaidSub);
+  setText('kpi-codAov', pay.kpis.codAov);
+  setText('kpi-codAovSub', pay.kpis.codAovSub);
+  setText('kpi-prepaidAov', pay.kpis.prepaidAov);
+  setText('kpi-prepaidAovSub', pay.kpis.prepaidAovSub);
+
+  // Stacked bar
+  var stackedBar = document.getElementById('payments-stackedBar');
+  if (stackedBar) {
+    stackedBar.innerHTML =
+      '<div class="bar-segment" style="width:' + pay.kpis.codShare + ';background:var(--orange);">COD ' + pay.kpis.codShare + '</div>' +
+      '<div class="bar-segment" style="width:' + pay.kpis.prepaidShare + ';background:var(--teal);">Prepaid ' + pay.kpis.prepaidShare + '</div>' +
+      '<div class="bar-segment" style="width:' + pay.kpis.otherShare + ';background:var(--gray-300);font-size:9px;">Other</div>';
+  }
+
+  setHTML('payments-rtoAlert', pay.rtoAlert);
+  setHTML('payments-unfulfilledAlert', pay.unfulfilledAlert);
+  setHTML('payments-advisory', pay.advisory);
+
+  // ===== MARKETING =====
+  var mkt = data.marketing;
+  setText('kpi-tallyAdSpend', mkt.kpis.tallyAdSpend);
+  setText('kpi-tallyAdSpendSub', mkt.kpis.tallyAdSpendSub);
+  setText('kpi-purchases', mkt.kpis.purchases);
+  setText('kpi-purchasesSub', mkt.kpis.purchasesSub);
+  setText('kpi-roas', mkt.kpis.roas);
+  setText('kpi-roasSub', mkt.kpis.roasSub);
+  setText('kpi-metaSpend', mkt.kpis.metaSpend);
+  setText('kpi-metaSpendSub', mkt.kpis.metaSpendSub);
+  setHTML('marketing-advisory', mkt.advisory);
+  setText('marketing-dataGap', mkt.dataGap);
+
+  // ===== CUSTOMERS =====
+  var cust = data.customers;
+  setText('kpi-uniqueCustomers', cust.kpis.uniqueCustomers);
+  setText('kpi-uniqueCustomersSub', cust.kpis.uniqueCustomersSub);
+  setText('kpi-repeatRate', cust.kpis.repeatRate);
+  setText('kpi-repeatRateSub', cust.kpis.repeatRateSub);
+  setText('kpi-oneTimeBuyers', cust.kpis.oneTimeBuyers);
+  setText('kpi-oneTimeSub', cust.kpis.oneTimeSub);
+  setText('kpi-repeatCustomers', cust.kpis.repeatCustomers);
+  setText('kpi-repeatSub', cust.kpis.repeatSub);
+  setHTML('customers-advisory', cust.advisory);
+  setText('customers-dataGap', cust.dataGap);
+
+  // ===== GEOGRAPHY =====
+  setHTML('geography-advisory', data.geography.advisory);
+
+  // ===== CASHFLOW =====
+  var cf = data.cashflow;
+  setText('kpi-openingBalance', cf.kpis.openingBalance);
+  setText('kpi-openingSub', cf.kpis.openingSub);
+  setText('kpi-closingBalance', cf.kpis.closingBalance);
+  setText('kpi-closingSub', cf.kpis.closingSub);
+  setText('kpi-netOutflow', cf.kpis.netOutflow);
+  setText('kpi-netOutflowSub', cf.kpis.netOutflowSub);
+  setText('kpi-timesAtZero', cf.kpis.timesAtZero);
+  setText('kpi-timesAtZeroSub', cf.kpis.timesAtZeroSub);
+  setText('cashflow-zeroAlertTitle', cf.zeroAlertTitle);
+  setHTML('cashflow-zeroAlert', cf.zeroAlert);
+  setText('cashflow-vendorPayablesSub', cf.vendorPayablesSub);
+  setHTML('cashflow-advisory', cf.advisory);
+
+  // Vendor payables table
+  var vpTbody = document.querySelector('#vendorPayablesTable tbody');
+  if (vpTbody) {
+    vpTbody.innerHTML = '';
+    cf.vendorPayables.forEach(function(vp, i) {
+      var tr = document.createElement('tr');
+      var isTotal = vp.vendor === 'Total Payable';
+      if (isTotal) tr.className = 'pnl-row-total';
+      tr.innerHTML = '<td' + (!isTotal && i === 0 ? ' class="font-bold"' : '') + '>' + vp.vendor + '</td>' +
+        '<td class="text-right' + (isTotal || i === 0 ? ' text-red' : '') + '">' + vp.amount + '</td>' +
+        '<td class="text-right">' + vp.aging + '</td>' +
+        '<td class="text-right">' + vp.share + '</td>';
+      vpTbody.appendChild(tr);
+    });
+  }
+
+  // ===== NOTIFICATIONS =====
+  var notifList = document.getElementById('notifList');
+  if (notifList && data.notifications) {
+    notifList.innerHTML = '';
+    data.notifications.forEach(function(n) {
+      var iconMap = { warning: '\u26A0\uFE0F', alert: '\uD83D\uDD34', info: '\u2139\uFE0F' };
+      var div = document.createElement('div');
+      div.className = 'notif-item';
+      div.innerHTML = '<span class="notif-icon">' + (iconMap[n.type] || '\u2139\uFE0F') + '</span><div><strong>' + n.title + '</strong><p style="margin:2px 0 0;font-size:12px;color:#6b7280;">' + n.desc + '</p></div>';
+      notifList.appendChild(div);
+    });
+  }
+
+  // ===== INSIGHTS =====
+  var insightsContainer = document.getElementById('insightsContainer');
+  if (insightsContainer && data.insights) {
+    insightsContainer.innerHTML = '';
+    data.insights.forEach(function(ins) {
+      var severityBadge = ins.severity === 'CRITICAL' ? 'badge-red' : ins.severity === 'WARNING' ? 'badge-orange' : 'badge-green';
+      var numColor = ins.borderColor;
+      var actions = ins.actions.map(function(a) { return '<li>' + a + '</li>'; }).join('');
+      var card = document.createElement('div');
+      card.className = 'insight-card border-' + ins.borderColor;
+      card.innerHTML =
+        '<div class="insight-number ' + numColor + '">' + ins.number + '</div>' +
+        '<div class="insight-content">' +
+          '<div class="insight-header">' +
+            '<span class="insight-title">' + ins.title + '</span>' +
+            '<span class="badge ' + severityBadge + '">' + ins.severity + '</span>' +
+          '</div>' +
+          '<div class="insight-body">' + ins.body + '</div>' +
+          '<div class="insight-actions">' +
+            '<strong>Recommended Actions</strong>' +
+            '<ul>' + actions + '</ul>' +
+          '</div>' +
+        '</div>';
+      insightsContainer.appendChild(card);
+    });
+  }
+
+  // ===== DATA STATUS =====
+  var dsAvail = document.getElementById('dataStatus-available');
+  var dsPend = document.getElementById('dataStatus-pending');
+  if (dsAvail && data.dataStatus) {
+    dsAvail.innerHTML = '';
+    data.dataStatus.available.forEach(function(item) {
+      var li = document.createElement('li');
+      li.innerHTML = '<span class="status-dot green"></span> ' + item;
+      dsAvail.appendChild(li);
+    });
+  }
+  if (dsPend && data.dataStatus) {
+    dsPend.innerHTML = '';
+    data.dataStatus.pending.forEach(function(item) {
+      var li = document.createElement('li');
+      li.innerHTML = '<span class="status-dot red"></span> ' + item;
+      dsPend.appendChild(li);
+    });
+  }
+
+  // ===== INIT ALL CHARTS =====
+  sections.forEach(function(s) { s.style.display = 'block'; });
+
+  initOverviewCharts(data);
+  initProfitabilityCharts(data);
+  initRevenueCharts(data);
+  initProductCharts(data);
+  initPaymentCharts(data);
+  initMarketingCharts(data);
+  initCustomerCharts(data);
+  initGeographyCharts(data);
+  initCashflowCharts(data);
+
+  sections.forEach(function(s) { s.style.display = ''; });
+
+  // Force resize overview
+  document.querySelectorAll('#sec-overview canvas').forEach(function(c) {
+    var chart = Chart.getChart(c);
+    if (chart) chart.resize();
+  });
+
+  // Hide loading overlay
+  var overlay = document.getElementById('loadingOverlay');
+  if (overlay) overlay.style.display = 'none';
+}
+
 // ===== OVERVIEW CHARTS =====
-function initOverviewCharts() {
-  // Revenue Trend
+function initOverviewCharts(data) {
+  var ch = data.charts;
+
   new Chart(document.getElementById('overviewRevenueChart'), {
     type: 'line',
     data: {
-      labels: months,
+      labels: ch.months,
       datasets: [
         {
           label: 'Gross Sales',
-          data: grossSales,
+          data: ch.grossSales,
           borderColor: C.teal,
           backgroundColor: C.tealLight,
           fill: true,
@@ -121,7 +419,7 @@ function initOverviewCharts() {
         },
         {
           label: 'Net Sales',
-          data: netSales,
+          data: ch.netSales,
           borderColor: C.blue,
           backgroundColor: C.blueLight,
           fill: true,
@@ -134,33 +432,32 @@ function initOverviewCharts() {
     options: {
       responsive: true,
       plugins: {
-        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtINR(ctx.raw) } }
+        tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + fmtINR(ctx.raw); } } }
       },
       scales: {
         y: {
           beginAtZero: true,
-          ticks: { callback: v => fmtINR(v) }
+          ticks: { callback: function(v) { return fmtINR(v); } }
         }
       }
     }
   });
 
-  // Orders & Sessions
   new Chart(document.getElementById('overviewOrdersChart'), {
     type: 'bar',
     data: {
-      labels: months,
+      labels: ch.months,
       datasets: [
         {
           label: 'Orders',
-          data: orders,
+          data: ch.orders,
           backgroundColor: C.teal,
           yAxisID: 'y',
           barPercentage: 0.6,
         },
         {
           label: 'Sessions',
-          data: sessions,
+          data: ch.sessions,
           type: 'line',
           borderColor: C.orange,
           backgroundColor: 'transparent',
@@ -174,40 +471,31 @@ function initOverviewCharts() {
     options: {
       responsive: true,
       plugins: {
-        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtNum(ctx.raw) } }
+        tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + fmtNum(ctx.raw); } } }
       },
       scales: {
         y: { beginAtZero: true, position: 'left', title: { display: true, text: 'Orders' } },
-        y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Sessions' }, ticks: { callback: v => (v/1000).toFixed(0) + 'K' } }
+        y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Sessions' }, ticks: { callback: function(v) { return (v/1000).toFixed(0) + 'K'; } } }
       }
     }
   });
 }
 
 // ===== PROFITABILITY CHARTS =====
-function initProfitabilityCharts() {
-  // Profit waterfall — horizontal bar chart
-  const wfItems = [
-    { label: 'Sales Revenue', value: 4350756, color: C.teal },
-    { label: 'Closing Stock', value: 1773000, color: C.green },
-    { label: 'Purchases (COGS)', value: -2893627, color: '#fca5a5' },
-    { label: 'Gross Profit', value: 3230129, color: C.green },
-    { label: 'Advertising', value: -2268986, color: C.red },
-    { label: 'General Expenses', value: -557858, color: '#fca5a5' },
-    { label: 'Promotional', value: -453741, color: '#fca5a5' },
-    { label: 'Shipping', value: -442023, color: '#fca5a5' },
-    { label: 'Payment Collection', value: -50655, color: '#fca5a5' },
-    { label: 'Other Expenses', value: -58501, color: '#fca5a5' },
-    { label: 'Net Loss', value: -600636, color: C.red },
-  ];
+function initProfitabilityCharts(data) {
+  var prof = data.profitability;
+
+  var wfItems = prof.waterfall.map(function(w) {
+    return { label: w.label, value: w.value, color: waterfallColorMap[w.color] || C.gray };
+  });
 
   new Chart(document.getElementById('waterfallChart'), {
     type: 'bar',
     data: {
-      labels: wfItems.map(i => i.label),
+      labels: wfItems.map(function(i) { return i.label; }),
       datasets: [{
-        data: wfItems.map(i => Math.abs(i.value)),
-        backgroundColor: wfItems.map(i => i.color),
+        data: wfItems.map(function(i) { return Math.abs(i.value); }),
+        backgroundColor: wfItems.map(function(i) { return i.color; }),
         barPercentage: 0.65,
       }]
     },
@@ -218,26 +506,26 @@ function initProfitabilityCharts() {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: ctx => {
-              const item = wfItems[ctx.dataIndex];
+            label: function(ctx) {
+              var item = wfItems[ctx.dataIndex];
               return item.label + ': ' + fmtINR(item.value);
             }
           }
         }
       },
       scales: {
-        x: { ticks: { callback: v => fmtINR(v) } }
+        x: { ticks: { callback: function(v) { return fmtINR(v); } } }
       }
     }
   });
 
-  // Expense Breakdown
+  var eb = prof.expenseBreakdown;
   new Chart(document.getElementById('expenseBreakdownChart'), {
     type: 'bar',
     data: {
-      labels: ['Advertising', 'General Expenses', 'Promotional', 'Shipping', 'Payment Collection', 'Other'],
+      labels: eb.labels,
       datasets: [{
-        data: [2268986, 557858, 453741, 442023, 50655, 58501],
+        data: eb.data,
         backgroundColor: [C.red, C.orange, C.purple, C.blue, C.teal, C.gray],
         barPercentage: 0.7,
       }]
@@ -247,28 +535,32 @@ function initProfitabilityCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => fmtINR(ctx.raw) } }
+        tooltip: { callbacks: { label: function(ctx) { return fmtINR(ctx.raw); } } }
       },
       scales: {
-        x: { ticks: { callback: v => fmtINR(v) } }
+        x: { ticks: { callback: function(v) { return fmtINR(v); } } }
       }
     }
   });
 }
 
 // ===== REVENUE CHARTS =====
-function initRevenueCharts() {
-  // MoM
-  const growthPct = grossSales.map((v, i) => i === 0 ? 0 : ((v - grossSales[i-1]) / grossSales[i-1] * 100).toFixed(1));
+function initRevenueCharts(data) {
+  var ch = data.charts;
+  var rev = data.revenue;
+
+  var growthPct = ch.grossSales.map(function(v, i) {
+    return i === 0 ? 0 : ((v - ch.grossSales[i-1]) / ch.grossSales[i-1] * 100).toFixed(1);
+  });
 
   new Chart(document.getElementById('revenueMoMChart'), {
     type: 'bar',
     data: {
-      labels: months,
+      labels: ch.months,
       datasets: [{
         label: 'Gross Sales',
-        data: grossSales,
-        backgroundColor: grossSales.map((v, i) => i > 0 && v > grossSales[i-1] ? C.teal : i === 0 ? C.teal : C.orange),
+        data: ch.grossSales,
+        backgroundColor: ch.grossSales.map(function(v, i) { return i > 0 && v > ch.grossSales[i-1] ? C.teal : i === 0 ? C.teal : C.orange; }),
         barPercentage: 0.65,
       }]
     },
@@ -278,24 +570,23 @@ function initRevenueCharts() {
         legend: { display: false },
         tooltip: {
           callbacks: {
-            label: ctx => fmtINR(ctx.raw),
-            afterLabel: ctx => 'MoM: ' + (ctx.dataIndex === 0 ? '—' : growthPct[ctx.dataIndex] + '%')
+            label: function(ctx) { return fmtINR(ctx.raw); },
+            afterLabel: function(ctx) { return 'MoM: ' + (ctx.dataIndex === 0 ? '\u2014' : growthPct[ctx.dataIndex] + '%'); }
           }
         }
       },
       scales: {
-        y: { ticks: { callback: v => fmtINR(v) } }
+        y: { ticks: { callback: function(v) { return fmtINR(v); } } }
       }
     }
   });
 
-  // Revenue Gap
   new Chart(document.getElementById('revenueGapChart'), {
     type: 'bar',
     data: {
       labels: ['Shopify Revenue', 'Tally Revenue', 'Gap'],
       datasets: [{
-        data: [5380000, 4349782, 1030218],
+        data: [rev.shopifyRevenueRaw, rev.tallyRevenueRaw, rev.gapRaw],
         backgroundColor: [C.teal, C.blue, C.red],
         barPercentage: 0.55,
       }]
@@ -304,23 +595,21 @@ function initRevenueCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => fmtINR(ctx.raw) } }
+        tooltip: { callbacks: { label: function(ctx) { return fmtINR(ctx.raw); } } }
       },
       scales: {
-        y: { ticks: { callback: v => fmtINR(v) } }
+        y: { ticks: { callback: function(v) { return fmtINR(v); } } }
       }
     }
   });
 
-  // Discount by month
-  const discounts = [22118, 16700, 35847, 40091, 50500, 89844, 30111, 37023, 63137];
   new Chart(document.getElementById('discountChart'), {
     type: 'bar',
     data: {
-      labels: months,
+      labels: ch.months,
       datasets: [{
         label: 'Discounts',
-        data: discounts,
+        data: ch.discounts,
         backgroundColor: C.orange,
         barPercentage: 0.6,
       }]
@@ -329,33 +618,29 @@ function initRevenueCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => '₹' + fmtNum(ctx.raw) } }
+        tooltip: { callbacks: { label: function(ctx) { return '\u20B9' + fmtNum(ctx.raw); } } }
       },
       scales: {
-        y: { ticks: { callback: v => '₹' + (v/1000).toFixed(0) + 'K' } }
+        y: { ticks: { callback: function(v) { return '\u20B9' + (v/1000).toFixed(0) + 'K'; } } }
       }
     }
   });
 
-  // Returns
-  const returnValues = [7646, 1680, 5094, 9666, 6810, 15159, 24390, 7203, 4359];
-  const returnOrders = [23, 12, 29, 33, 40, 65, 36, 32, 49];
-
   new Chart(document.getElementById('returnsChart'), {
     type: 'bar',
     data: {
-      labels: months,
+      labels: ch.months,
       datasets: [
         {
-          label: 'Return Value (₹)',
-          data: returnValues,
+          label: 'Return Value (\u20B9)',
+          data: ch.returnValues,
           backgroundColor: C.red,
           yAxisID: 'y',
           barPercentage: 0.5,
         },
         {
           label: 'Return Orders',
-          data: returnOrders,
+          data: ch.returnOrders,
           type: 'line',
           borderColor: C.orange,
           backgroundColor: 'transparent',
@@ -369,10 +654,10 @@ function initRevenueCharts() {
     options: {
       responsive: true,
       plugins: {
-        tooltip: { callbacks: { label: ctx => ctx.datasetIndex === 0 ? '₹' + fmtNum(ctx.raw) : ctx.raw + ' orders' } }
+        tooltip: { callbacks: { label: function(ctx) { return ctx.datasetIndex === 0 ? '\u20B9' + fmtNum(ctx.raw) : ctx.raw + ' orders'; } } }
       },
       scales: {
-        y: { beginAtZero: true, position: 'left', title: { display: true, text: 'Value (₹)' }, ticks: { callback: v => '₹' + (v/1000).toFixed(0) + 'K' } },
+        y: { beginAtZero: true, position: 'left', title: { display: true, text: 'Value (\u20B9)' }, ticks: { callback: function(v) { return '\u20B9' + (v/1000).toFixed(0) + 'K'; } } },
         y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Orders' } }
       }
     }
@@ -380,40 +665,16 @@ function initRevenueCharts() {
 }
 
 // ===== PRODUCT CHARTS =====
-function initProductCharts() {
-  const products = [
-    { name: 'Gingham Grace dress', units: 1703, revenue: 2771248, share: 51.5 },
-    { name: 'Wine Bodycon Dress', units: 289, revenue: 514853, share: 9.6 },
-    { name: 'Pink Gingham Grace dress', units: 297, revenue: 492664, share: 9.2 },
-    { name: 'Cherry Blossom Dress', units: 160, revenue: 342503, share: 6.4 },
-    { name: 'Blue Breeze Shirt Dress', units: 140, revenue: 235627, share: 4.4 },
-    { name: 'Belle Ruched Dress', units: 129, revenue: 204560, share: 3.8 },
-    { name: 'Marilyn striped dress', units: 86, revenue: 143496, share: 2.7 },
-    { name: 'Blue gingham Grace Dress', units: 81, revenue: 134187, share: 2.5 },
-    { name: 'PINK PUFF Long Dress', units: 39, revenue: 87229, share: 1.6 },
-    { name: 'Sera red dress', units: 45, revenue: 67495, share: 1.3 },
-    { name: 'Moonlit skater dress', units: 40, revenue: 64361, share: 1.2 },
-    { name: 'Country Breeze Gingham Dress', units: 35, revenue: 59527, share: 1.1 },
-    { name: 'RUBY SLIT LONG DRESS', units: 22, revenue: 42652, share: 0.8 },
-    { name: 'Margot Bodycon Dress', units: 25, revenue: 45979, share: 0.9 },
-    { name: 'Eden bloom dress', units: 14, revenue: 21268, share: 0.4 },
-  ];
+function initProductCharts(data) {
+  var prod = data.products;
 
-  const tbody = document.querySelector('#productsTable tbody');
-  products.forEach((p, i) => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `<td>${i+1}</td><td class="${i === 0 ? 'font-bold' : ''}">${p.name}</td><td class="text-right">${fmtNum(p.units)}</td><td class="text-right">${fmtINR(p.revenue)}</td><td class="text-right font-bold">${p.share}%</td>`;
-    tbody.appendChild(tr);
-  });
-
-  // Concentration
   new Chart(document.getElementById('productConcentrationChart'), {
     type: 'bar',
     data: {
-      labels: products.slice(0, 8).map(p => p.name.length > 18 ? p.name.slice(0,18)+'…' : p.name),
+      labels: prod.items.slice(0, 8).map(function(p) { return p.name.length > 18 ? p.name.slice(0,18)+'\u2026' : p.name; }),
       datasets: [{
-        data: products.slice(0, 8).map(p => p.share),
-        backgroundColor: products.slice(0, 8).map((p, i) => i === 0 ? C.red : i < 3 ? C.orange : C.teal),
+        data: prod.items.slice(0, 8).map(function(p) { return p.share; }),
+        backgroundColor: prod.items.slice(0, 8).map(function(p, i) { return i === 0 ? C.red : i < 3 ? C.orange : C.teal; }),
         barPercentage: 0.7,
       }]
     },
@@ -422,21 +683,20 @@ function initProductCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ctx.raw + '% of revenue' } }
+        tooltip: { callbacks: { label: function(ctx) { return ctx.raw + '% of revenue'; } } }
       },
       scales: {
-        x: { max: 60, ticks: { callback: v => v + '%' } }
+        x: { max: 60, ticks: { callback: function(v) { return v + '%'; } } }
       }
     }
   });
 
-  // Size Distribution
   new Chart(document.getElementById('sizeChart'), {
     type: 'doughnut',
     data: {
-      labels: ['M', 'S', 'L', 'XS', 'XL'],
+      labels: prod.sizes.labels,
       datasets: [{
-        data: [862, 690, 672, 564, 437],
+        data: prod.sizes.data,
         backgroundColor: [C.teal, C.blue, C.orange, C.green, C.purple],
         borderWidth: 2,
         borderColor: '#fff',
@@ -446,21 +706,22 @@ function initProductCharts() {
       responsive: true,
       cutout: '55%',
       plugins: {
-        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + fmtNum(ctx.raw) + ' units' } }
+        tooltip: { callbacks: { label: function(ctx) { return ctx.label + ': ' + fmtNum(ctx.raw) + ' units'; } } }
       }
     }
   });
 }
 
 // ===== PAYMENT CHARTS =====
-function initPaymentCharts() {
-  // Cancel rate comparison
+function initPaymentCharts(data) {
+  var pay = data.payments;
+
   new Chart(document.getElementById('cancelRateChart'), {
     type: 'bar',
     data: {
       labels: ['COD Cancel Rate', 'Prepaid Cancel Rate'],
       datasets: [{
-        data: [4.2, 0.8],
+        data: [pay.cancelRate.cod, pay.cancelRate.prepaid],
         backgroundColor: [C.red, C.green],
         barPercentage: 0.5,
       }]
@@ -469,22 +730,21 @@ function initPaymentCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        title: { display: true, text: 'Cancellation Rate — COD vs Prepaid', font: { size: 13, weight: '700' }, color: '#1f2937' },
-        tooltip: { callbacks: { label: ctx => ctx.raw + '%' } }
+        title: { display: true, text: 'Cancellation Rate \u2014 COD vs Prepaid', font: { size: 13, weight: '700' }, color: '#1f2937' },
+        tooltip: { callbacks: { label: function(ctx) { return ctx.raw + '%'; } } }
       },
       scales: {
-        y: { ticks: { callback: v => v + '%' }, max: 6 }
+        y: { ticks: { callback: function(v) { return v + '%'; } }, max: 6 }
       }
     }
   });
 
-  // AOV comparison
   new Chart(document.getElementById('paymentAovChart'), {
     type: 'bar',
     data: {
       labels: ['COD AOV', 'Prepaid AOV'],
       datasets: [{
-        data: [2044, 1844],
+        data: [pay.aovComparison.cod, pay.aovComparison.prepaid],
         backgroundColor: [C.orange, C.teal],
         barPercentage: 0.5,
       }]
@@ -494,24 +754,25 @@ function initPaymentCharts() {
       plugins: {
         legend: { display: false },
         title: { display: true, text: 'Average Order Value by Payment', font: { size: 13, weight: '700' }, color: '#1f2937' },
-        tooltip: { callbacks: { label: ctx => '₹' + fmtNum(ctx.raw) } }
+        tooltip: { callbacks: { label: function(ctx) { return '\u20B9' + fmtNum(ctx.raw); } } }
       },
       scales: {
-        y: { ticks: { callback: v => '₹' + fmtNum(v) }, beginAtZero: false, min: 1500 }
+        y: { ticks: { callback: function(v) { return '\u20B9' + fmtNum(v); } }, beginAtZero: false, min: 1500 }
       }
     }
   });
 }
 
 // ===== MARKETING CHARTS =====
-function initMarketingCharts() {
-  // ROAS benchmark
+function initMarketingCharts(data) {
+  var mkt = data.marketing;
+
   new Chart(document.getElementById('roasChart'), {
     type: 'bar',
     data: {
       labels: ['DIOSTE ROAS (Tally)', 'Minimum Target', 'Industry Avg'],
       datasets: [{
-        data: [1.92, 3.0, 3.5],
+        data: [mkt.roasBenchmark.dioste, mkt.roasBenchmark.minimum, mkt.roasBenchmark.industry],
         backgroundColor: [C.red, C.orange, C.green],
         barPercentage: 0.5,
       }]
@@ -520,21 +781,20 @@ function initMarketingCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ctx.raw + 'x' } }
+        tooltip: { callbacks: { label: function(ctx) { return ctx.raw + 'x'; } } }
       },
       scales: {
-        y: { beginAtZero: true, max: 5, ticks: { callback: v => v + 'x' } }
+        y: { beginAtZero: true, max: 5, ticks: { callback: function(v) { return v + 'x'; } } }
       }
     }
   });
 
-  // Ad spend gap
   new Chart(document.getElementById('adSpendGapChart'), {
     type: 'bar',
     data: {
-      labels: ['Bank Payments (Apr-Dec)', 'Tally Books (Apr-Dec)', 'Meta Report (Apr-Feb)'],
+      labels: mkt.adSpendGap.labels,
       datasets: [{
-        data: [693000, 2152886, 2583302],
+        data: mkt.adSpendGap.data,
         backgroundColor: [C.blue, C.orange, C.red],
         barPercentage: 0.45,
       }]
@@ -543,28 +803,29 @@ function initMarketingCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => fmtINR(ctx.raw) } }
+        tooltip: { callbacks: { label: function(ctx) { return fmtINR(ctx.raw); } } }
       },
       scales: {
-        y: { ticks: { callback: v => fmtINR(v) } }
+        y: { ticks: { callback: function(v) { return fmtINR(v); } } }
       }
     }
   });
 }
 
 // ===== CUSTOMER CHARTS =====
-function initCustomerCharts() {
-  const retRates = [0, 0, 0, 0, 0.2, 0, 0, 0, 0];
+function initCustomerCharts(data) {
+  var ch = data.charts;
+  var cust = data.customers;
 
   new Chart(document.getElementById('returningRateChart'), {
     type: 'bar',
     data: {
-      labels: months,
+      labels: ch.months,
       datasets: [{
         label: 'Returning Customer Rate',
-        data: retRates,
-        backgroundColor: retRates.map(v => v > 0 ? C.teal : C.grayLight),
-        borderColor: retRates.map(v => v > 0 ? C.teal : '#e5e7eb'),
+        data: ch.retRates,
+        backgroundColor: ch.retRates.map(function(v) { return v > 0 ? C.teal : C.grayLight; }),
+        borderColor: ch.retRates.map(function(v) { return v > 0 ? C.teal : '#e5e7eb'; }),
         borderWidth: 1,
         barPercentage: 0.6,
       }]
@@ -573,21 +834,20 @@ function initCustomerCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => ctx.raw + '%' } }
+        tooltip: { callbacks: { label: function(ctx) { return ctx.raw + '%'; } } }
       },
       scales: {
-        y: { max: 1, ticks: { callback: v => v + '%' } }
+        y: { max: 1, ticks: { callback: function(v) { return v + '%'; } } }
       }
     }
   });
 
-  // Order frequency
   new Chart(document.getElementById('orderFreqChart'), {
     type: 'bar',
     data: {
-      labels: ['1 Order', '2 Orders', '3+ Orders'],
+      labels: cust.orderFrequency.labels,
       datasets: [{
-        data: [2470, 225, 30],
+        data: cust.orderFrequency.data,
         backgroundColor: [C.gray, C.teal, C.green],
         barPercentage: 0.55,
       }]
@@ -596,28 +856,26 @@ function initCustomerCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => fmtNum(ctx.raw) + ' customers' } }
+        tooltip: { callbacks: { label: function(ctx) { return fmtNum(ctx.raw) + ' customers'; } } }
       },
       scales: {
-        y: { ticks: { callback: v => fmtNum(v) } }
+        y: { ticks: { callback: function(v) { return fmtNum(v); } } }
       }
     }
   });
 }
 
 // ===== GEOGRAPHY CHARTS =====
-function initGeographyCharts() {
-  const stateLabels = ['KA','MH','TN','TS','UP','GJ','KL','DL','HR','WB','AP','RJ','OR','MP','AS'];
-  const stateOrders = [634,619,322,300,141,138,132,125,93,81,70,52,47,46,40];
-  const stateNames = ['Karnataka','Maharashtra','Tamil Nadu','Telangana','Uttar Pradesh','Gujarat','Kerala','Delhi','Haryana','West Bengal','Andhra Pradesh','Rajasthan','Odisha','Madhya Pradesh','Assam'];
+function initGeographyCharts(data) {
+  var geo = data.geography;
 
   new Chart(document.getElementById('stateOrdersChart'), {
     type: 'bar',
     data: {
-      labels: stateNames,
+      labels: geo.states.names,
       datasets: [{
-        data: stateOrders,
-        backgroundColor: stateOrders.map((v, i) => i < 2 ? C.teal : i < 5 ? C.blue : C.gray),
+        data: geo.states.orders,
+        backgroundColor: geo.states.orders.map(function(v, i) { return i < 2 ? C.teal : i < 5 ? C.blue : C.gray; }),
         barPercentage: 0.7,
       }]
     },
@@ -626,21 +884,18 @@ function initGeographyCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => fmtNum(ctx.raw) + ' orders' } }
+        tooltip: { callbacks: { label: function(ctx) { return fmtNum(ctx.raw) + ' orders'; } } }
       }
     }
   });
-
-  const cities = ['Bangalore','Mumbai','Hyderabad','Pune','Chennai','Thane','Gurgaon','K.V.Rangareddy','Ahmedabad','Coimbatore','Ernakulam','Kanchipuram','Tiruvallur','Kolkata','Gautam B. Nagar'];
-  const cityOrders = [502,254,170,161,110,99,61,60,56,53,46,41,38,37,35];
 
   new Chart(document.getElementById('cityOrdersChart'), {
     type: 'bar',
     data: {
-      labels: cities,
+      labels: geo.cities.names,
       datasets: [{
-        data: cityOrders,
-        backgroundColor: cityOrders.map((v, i) => i === 0 ? C.teal : i < 5 ? C.blue : C.gray),
+        data: geo.cities.orders,
+        backgroundColor: geo.cities.orders.map(function(v, i) { return i === 0 ? C.teal : i < 5 ? C.blue : C.gray; }),
         barPercentage: 0.7,
       }]
     },
@@ -649,29 +904,26 @@ function initGeographyCharts() {
       responsive: true,
       plugins: {
         legend: { display: false },
-        tooltip: { callbacks: { label: ctx => fmtNum(ctx.raw) + ' orders' } }
+        tooltip: { callbacks: { label: function(ctx) { return fmtNum(ctx.raw) + ' orders'; } } }
       }
     }
   });
 
-  // Sessions vs Orders by state
-  const sessionsByState = [58826,69034,30106,30934,11074,20201,19696,23628,5733,11983,4803,7578,5809,8120,7282];
-
   new Chart(document.getElementById('sessionsVsOrdersChart'), {
     type: 'bar',
     data: {
-      labels: stateNames,
+      labels: geo.states.names,
       datasets: [
         {
           label: 'Orders',
-          data: stateOrders,
+          data: geo.states.orders,
           backgroundColor: C.teal,
           yAxisID: 'y',
           barPercentage: 0.6,
         },
         {
           label: 'Sessions',
-          data: sessionsByState,
+          data: geo.states.sessions,
           type: 'line',
           borderColor: C.orange,
           backgroundColor: 'transparent',
@@ -686,91 +938,72 @@ function initGeographyCharts() {
       responsive: true,
       scales: {
         y: { beginAtZero: true, position: 'left', title: { display: true, text: 'Orders' } },
-        y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Sessions' }, ticks: { callback: v => (v/1000).toFixed(0) + 'K' } }
+        y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: 'Sessions' }, ticks: { callback: function(v) { return (v/1000).toFixed(0) + 'K'; } } }
       }
     }
   });
 }
 
 // ===== CASHFLOW CHARTS =====
-function initCashflowCharts() {
-  // Daily balance
-  const dailyData = [
-    {d:'Apr 02',v:210740},{d:'Apr 10',v:109270},{d:'Apr 20',v:116975},{d:'Apr 30',v:120579},
-    {d:'May 10',v:148154},{d:'May 20',v:179121},{d:'May 31',v:118996},
-    {d:'Jun 10',v:66687},{d:'Jun 20',v:106871},{d:'Jun 30',v:77134},
-    {d:'Jul 10',v:36082},{d:'Jul 20',v:78105},{d:'Jul 31',v:164026},
-    {d:'Aug 10',v:86289},{d:'Aug 20',v:28997},{d:'Aug 30',v:136679},
-    {d:'Sep 05',v:227604},{d:'Sep 10',v:338274},{d:'Sep 17',v:10128},{d:'Sep 29',v:14542},
-    {d:'Oct 01',v:542},{d:'Oct 02',v:0},
-    {d:'Nov 19',v:1900},{d:'Nov 24',v:59},{d:'Nov 28',v:35},
-    {d:'Dec 05',v:0},{d:'Dec 10',v:0},{d:'Dec 14',v:0},{d:'Dec 20',v:0},{d:'Dec 28',v:1640},
-    {d:'Jan 04',v:0},{d:'Jan 06',v:0},{d:'Jan 15',v:2174}
-  ];
+function initCashflowCharts(data) {
+  var cf = data.cashflow;
 
   new Chart(document.getElementById('dailyBalanceChart'), {
     type: 'line',
     data: {
-      labels: dailyData.map(d => d.d),
+      labels: cf.dailyBalance.map(function(d) { return d.d; }),
       datasets: [{
         label: 'Bank Balance',
-        data: dailyData.map(d => d.v),
+        data: cf.dailyBalance.map(function(d) { return d.v; }),
         borderColor: C.red,
         backgroundColor: 'rgba(239,68,68,0.08)',
         fill: true,
         tension: 0.2,
         borderWidth: 2,
-        pointRadius: 2,
-        pointBackgroundColor: dailyData.map(d => d.v === 0 ? C.red : C.blue),
-        pointBorderColor: dailyData.map(d => d.v === 0 ? C.red : 'transparent'),
-        pointRadius: dailyData.map(d => d.v === 0 ? 5 : 2),
+        pointBackgroundColor: cf.dailyBalance.map(function(d) { return d.v === 0 ? C.red : C.blue; }),
+        pointBorderColor: cf.dailyBalance.map(function(d) { return d.v === 0 ? C.red : 'transparent'; }),
+        pointRadius: cf.dailyBalance.map(function(d) { return d.v === 0 ? 5 : 2; }),
       }]
     },
     options: {
       responsive: true,
       plugins: {
-        tooltip: { callbacks: { label: ctx => fmtINR(ctx.raw) } },
+        tooltip: { callbacks: { label: function(ctx) { return fmtINR(ctx.raw); } } },
         annotation: undefined
       },
       scales: {
-        y: { beginAtZero: true, ticks: { callback: v => fmtINR(v) } },
+        y: { beginAtZero: true, ticks: { callback: function(v) { return fmtINR(v); } } },
         x: { ticks: { maxRotation: 45, font: { size: 10 } } }
       }
     }
   });
 
-  // Monthly Inflow vs Outflow
-  const bankMonths = ['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan'];
-  const credits = [309992,181246,182712,530276,630297,417893,0,69422,274364,109211];
-  const debits = [392178,181759,222893,451466,650742,520046,14542,69387,273578,107858];
-
   new Chart(document.getElementById('inflowOutflowChart'), {
     type: 'bar',
     data: {
-      labels: bankMonths,
+      labels: cf.monthly.months,
       datasets: [
-        { label: 'Credits (In)', data: credits, backgroundColor: C.green, barPercentage: 0.6 },
-        { label: 'Debits (Out)', data: debits, backgroundColor: C.red, barPercentage: 0.6 }
+        { label: 'Credits (In)', data: cf.monthly.credits, backgroundColor: C.green, barPercentage: 0.6 },
+        { label: 'Debits (Out)', data: cf.monthly.debits, backgroundColor: C.red, barPercentage: 0.6 }
       ]
     },
     options: {
       responsive: true,
       plugins: {
-        tooltip: { callbacks: { label: ctx => ctx.dataset.label + ': ' + fmtINR(ctx.raw) } }
+        tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label + ': ' + fmtINR(ctx.raw); } } }
       },
       scales: {
-        y: { ticks: { callback: v => fmtINR(v) } }
+        y: { ticks: { callback: function(v) { return fmtINR(v); } } }
       }
     }
   });
 
-  // Inflow donut
   new Chart(document.getElementById('inflowDonutChart'), {
     type: 'doughnut',
     data: {
-      labels: ['Razorpay', 'Shiprocket COD', 'Other Credits'],
+      labels: cf.inflowSources.labels,
       datasets: [{
-        data: [40, 33, 27],
+        data: cf.inflowSources.data,
         backgroundColor: [C.teal, C.orange, C.gray],
         borderWidth: 2,
         borderColor: '#fff',
@@ -780,18 +1013,17 @@ function initCashflowCharts() {
       responsive: true,
       cutout: '55%',
       plugins: {
-        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + '%' } }
+        tooltip: { callbacks: { label: function(ctx) { return ctx.label + ': ' + ctx.raw + '%'; } } }
       }
     }
   });
 
-  // Outflow donut
   new Chart(document.getElementById('outflowDonutChart'), {
     type: 'doughnut',
     data: {
-      labels: ['Self Transfer', 'Meta Ads', 'NOWDEZ', 'Other'],
+      labels: cf.outflowSources.labels,
       datasets: [{
-        data: [26, 24, 21, 29],
+        data: cf.outflowSources.data,
         backgroundColor: [C.purple, C.red, C.orange, C.gray],
         borderWidth: 2,
         borderColor: '#fff',
@@ -801,7 +1033,7 @@ function initCashflowCharts() {
       responsive: true,
       cutout: '55%',
       plugins: {
-        tooltip: { callbacks: { label: ctx => ctx.label + ': ' + ctx.raw + '%' } }
+        tooltip: { callbacks: { label: function(ctx) { return ctx.label + ': ' + ctx.raw + '%'; } } }
       }
     }
   });

@@ -3,14 +3,6 @@
 (function() {
   'use strict';
 
-  // ===== CREDENTIALS =====
-  // Simple client-side auth for demo — replace with real backend auth
-  const VALID_CREDENTIALS = {
-    'help@aiaccountant.com': 'aiaccountant2026',
-    'demo@aiaccountant.com': 'demo2026',
-    'admin@aiaccountant.com': 'admin2026'
-  };
-
   // ===== DOM REFS =====
   const form = document.getElementById('loginForm');
   const emailInput = document.getElementById('email');
@@ -71,28 +63,37 @@
     // Show loading
     setLoading(true);
 
-    // Simulate auth delay
-    setTimeout(function() {
-      if (VALID_CREDENTIALS[email] && VALID_CREDENTIALS[email] === password) {
-        // Log success
+    // Authenticate via API
+    fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password })
+    })
+    .then(function(res) { return res.json(); })
+    .then(function(data) {
+      if (data.success && data.token) {
         if (window.AIA) {
           window.AIA.Audit.logLoginAttempt(email, true);
-          window.AIA.Session.create(email);
+          window.AIA.Session.create(email, data.token);
           window.AIA.Audit.log('login_success', { email: email });
         }
-        // Success — redirect to dashboard
         window.location.href = 'index.html';
       } else {
-        // Log failure
         if (window.AIA) {
           window.AIA.Audit.logLoginAttempt(email, false);
         }
         setLoading(false);
-        showError('Invalid email or password. Please try again.');
+        showError(data.error || 'Invalid email or password. Please try again.');
         passwordInput.value = '';
         passwordInput.focus();
       }
-    }, 800);
+    })
+    .catch(function() {
+      setLoading(false);
+      showError('Network error. Please try again.');
+      passwordInput.value = '';
+      passwordInput.focus();
+    });
   });
 
   // ===== HELPERS =====

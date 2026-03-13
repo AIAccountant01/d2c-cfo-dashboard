@@ -6,5 +6,12 @@
   "scripts": {
     "start": "npx serve .",
     "build": "echo 'Static site — no build step required'"
+  },
+  "main": "app.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsonwebtoken": "^9.0.3"
   }
 }
