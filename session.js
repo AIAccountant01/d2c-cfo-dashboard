@@ -1,6 +1,6 @@
 // ===== AI ACCOUNTANT — SESSION & AUDIT SYSTEM ===== //
 // Shared across login.html and index.html (dashboard)
-// In-memory session management (no localStorage — sandbox safe)
+// In-memory session management — sandbox safe
 
 (function() {
   'use strict';
@@ -11,7 +11,7 @@
   const AUDIT_KEY = '__aia_audit';
 
   // ===== IN-MEMORY STORE (survives within same page, not across tabs) =====
-  // We use window-level variables since localStorage is blocked in sandboxed iframes
+  // We use window-level variables for cross-page persistence
   if (!window.__aiaStore) {
     window.__aiaStore = {
       session: null,
