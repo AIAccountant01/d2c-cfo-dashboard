@@ -263,8 +263,23 @@ function populateDashboard(data) {
   setText('kpi-roasSub', mkt.kpis.roasSub);
   setText('kpi-metaSpend', mkt.kpis.metaSpend);
   setText('kpi-metaSpendSub', mkt.kpis.metaSpendSub);
+  setText('kpi-metaROAS', mkt.kpis.metaROAS);
+  setText('kpi-metaROASSub', mkt.kpis.metaROASSub);
+  setText('kpi-avgCPA', mkt.kpis.avgCPA);
+  setText('kpi-avgCPASub', mkt.kpis.avgCPASub);
+  setText('kpi-totalReach', mkt.kpis.totalReach);
+  setText('kpi-totalReachSub', mkt.kpis.totalReachSub);
+  if (mkt.metaAds) {
+    var mo = mkt.metaAds.overview;
+    setText('kpi-activeCampaigns', mo.activeCampaigns + ' / ' + mo.totalCampaigns);
+    setText('kpi-activeCampaignsSub', mo.totalCampaigns + ' total, ' + (mo.totalCampaigns - mo.activeCampaigns) + ' paused');
+  }
   setHTML('marketing-advisory', mkt.advisory);
-  setHTML('marketing-dataGap', mkt.dataGap);
+  if (mkt.dataGap) {
+    setHTML('marketing-dataGap', mkt.dataGap);
+    var gapEl = document.getElementById('marketing-gap-note');
+    if (gapEl) gapEl.style.display = 'flex';
+  }
 
   // ===== CUSTOMERS =====
   var cust = data.customers;
@@ -766,14 +781,21 @@ function initPaymentCharts(data) {
 // ===== MARKETING CHARTS =====
 function initMarketingCharts(data) {
   var mkt = data.marketing;
+  var meta = mkt.metaAds;
 
+  // ROAS Benchmark (now includes Meta-reported)
   new Chart(document.getElementById('roasChart'), {
     type: 'bar',
     data: {
-      labels: ['DIOSTE ROAS (Tally)', 'Minimum Target', 'Industry Avg'],
+      labels: ['Tally ROAS', 'Meta ROAS', 'Min Target', 'Industry Avg'],
       datasets: [{
-        data: [mkt.roasBenchmark.dioste, mkt.roasBenchmark.minimum, mkt.roasBenchmark.industry],
-        backgroundColor: [C.red, C.orange, C.green],
+        data: [
+          mkt.roasBenchmark.dioste,
+          mkt.roasBenchmark.metaReported || 0,
+          mkt.roasBenchmark.minimum,
+          mkt.roasBenchmark.industry
+        ],
+        backgroundColor: [C.red, C.blue, C.orange, C.green],
         barPercentage: 0.5,
       }]
     },
@@ -789,6 +811,7 @@ function initMarketingCharts(data) {
     }
   });
 
+  // Ad Spend Sources
   new Chart(document.getElementById('adSpendGapChart'), {
     type: 'bar',
     data: {
@@ -809,6 +832,216 @@ function initMarketingCharts(data) {
         y: { ticks: { callback: function(v) { return fmtINR(v); } } }
       }
     }
+  });
+
+  if (!meta) return;
+
+  // Campaign Type — Spend & Purchases (grouped bar)
+  var ctp = meta.campaignTypePerformance;
+  new Chart(document.getElementById('campTypeChart'), {
+    type: 'bar',
+    data: {
+      labels: ctp.labels,
+      datasets: [
+        { label: 'Spend (₹)', data: ctp.spend, backgroundColor: C.blue, yAxisID: 'y', barPercentage: 0.7 },
+        { label: 'Purchases', data: ctp.purchases, backgroundColor: C.teal, yAxisID: 'y1', barPercentage: 0.7 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12 } },
+        tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label === 'Spend (₹)' ? fmtINR(ctx.raw) : ctx.raw + ' purchases'; } } }
+      },
+      scales: {
+        y: { position: 'left', ticks: { callback: function(v) { return fmtINR(v); } } },
+        y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { callback: function(v) { return v; } } }
+      }
+    }
+  });
+
+  // Campaign Type — ROAS & CPA
+  new Chart(document.getElementById('campTypeROASChart'), {
+    type: 'bar',
+    data: {
+      labels: ctp.labels,
+      datasets: [
+        { label: 'ROAS', data: ctp.roas, backgroundColor: C.green, yAxisID: 'y', barPercentage: 0.7 },
+        { label: 'CPA (₹)', data: ctp.cpa, backgroundColor: C.orange, yAxisID: 'y1', barPercentage: 0.7 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12 } },
+        tooltip: { callbacks: { label: function(ctx) { return ctx.dataset.label === 'ROAS' ? ctx.raw + 'x' : fmtINR(ctx.raw); } } }
+      },
+      scales: {
+        y: { position: 'left', ticks: { callback: function(v) { return v + 'x'; } } },
+        y1: { position: 'right', grid: { drawOnChartArea: false }, ticks: { callback: function(v) { return fmtINR(v); } } }
+      }
+    }
+  });
+
+  // Top Campaigns Table
+  var tcBody = document.querySelector('#topCampaignsTable tbody');
+  if (tcBody && meta.topCampaigns) {
+    tcBody.innerHTML = '';
+    meta.topCampaigns.forEach(function(c) {
+      var roasClass = c.roas >= 3 ? 'text-green' : (c.roas >= 2 ? 'text-orange' : 'text-red');
+      var cpaClass = c.cpa <= 700 ? 'text-green' : (c.cpa <= 900 ? '' : 'text-red');
+      tcBody.innerHTML += '<tr>' +
+        '<td>' + c.name + '</td>' +
+        '<td><span class="badge badge-' + (c.type === 'CBO' ? 'green' : (c.type === 'ABO' ? 'blue' : 'gray')) + '">' + c.type + '</span></td>' +
+        '<td class="text-right">' + fmtINR(c.spend) + '</td>' +
+        '<td class="text-right">' + c.purchases + '</td>' +
+        '<td class="text-right ' + roasClass + ' font-bold">' + c.roas + 'x</td>' +
+        '<td class="text-right ' + cpaClass + '">' + fmtINR(c.cpa) + '</td>' +
+        '<td class="text-right">' + c.ctr + '%</td>' +
+        '</tr>';
+    });
+  }
+
+  // Best ROAS Table
+  fillROASTable('bestROASTable', meta.bestROASCampaigns, 'text-green');
+  fillROASTable('worstROASTable', meta.worstROASCampaigns, 'text-red');
+
+  // Demographics — Age Chart
+  var agd = meta.demographics.ageBreakdown;
+  new Chart(document.getElementById('ageChart'), {
+    type: 'bar',
+    data: {
+      labels: agd.labels,
+      datasets: [
+        { label: 'Spend (₹)', data: agd.spend, backgroundColor: C.blue, yAxisID: 'y', barPercentage: 0.65 },
+        { label: 'Purchases', data: agd.purchases, backgroundColor: C.teal, yAxisID: 'y1', barPercentage: 0.65 }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'top', labels: { boxWidth: 12 } } },
+      scales: {
+        y: { position: 'left', ticks: { callback: function(v) { return fmtINR(v); } } },
+        y1: { position: 'right', grid: { drawOnChartArea: false } }
+      }
+    }
+  });
+
+  // Demographics — Gender Chart (doughnut)
+  var gnd = meta.demographics.genderBreakdown;
+  new Chart(document.getElementById('genderChart'), {
+    type: 'doughnut',
+    data: {
+      labels: gnd.labels,
+      datasets: [{
+        data: gnd.purchases,
+        backgroundColor: ['#ec4899', '#3b82f6', '#9ca3af'],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      cutout: '55%',
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: { callbacks: { label: function(ctx) { return ctx.label + ': ' + ctx.raw + ' purchases (CPA ' + fmtINR(gnd.cpa[ctx.dataIndex]) + ')'; } } }
+      }
+    }
+  });
+
+  // Demographic Segments Table
+  var dsBody = document.querySelector('#demoSegmentsTable tbody');
+  if (dsBody && meta.demographics.topSegments) {
+    dsBody.innerHTML = '';
+    meta.demographics.topSegments.forEach(function(s) {
+      var cpaClass = s.cpa <= 800 ? 'text-green' : (s.cpa <= 1000 ? '' : 'text-red');
+      dsBody.innerHTML += '<tr>' +
+        '<td>' + s.age + ' · ' + s.gender + '</td>' +
+        '<td class="text-right">' + fmtINR(s.spend) + '</td>' +
+        '<td class="text-right">' + s.spendPct + '%</td>' +
+        '<td class="text-right font-bold">' + s.purchases + '</td>' +
+        '<td class="text-right ' + cpaClass + '">' + fmtINR(s.cpa) + '</td>' +
+        '</tr>';
+    });
+  }
+
+  // Top Creatives Table
+  var crBody = document.querySelector('#topCreativesTable tbody');
+  if (crBody && meta.creativePerformance.topCreatives) {
+    crBody.innerHTML = '';
+    meta.creativePerformance.topCreatives.forEach(function(cr) {
+      var roasClass = cr.roas >= 3 ? 'text-green' : (cr.roas >= 2 ? '' : 'text-red');
+      function rankBadge(val) {
+        if (val === 'Above average') return '<span class="badge badge-green">Above Avg</span>';
+        if (val === 'Average') return '<span class="badge badge-yellow">Average</span>';
+        if (val === 'Below average (bottom 35%)') return '<span class="badge badge-red">Below Avg</span>';
+        return '<span class="badge badge-gray">' + val + '</span>';
+      }
+      crBody.innerHTML += '<tr>' +
+        '<td>' + cr.name + '</td>' +
+        '<td class="text-right font-bold">' + cr.purchases + '</td>' +
+        '<td class="text-right">' + fmtINR(cr.spend) + '</td>' +
+        '<td class="text-right ' + roasClass + '">' + cr.roas + 'x</td>' +
+        '<td>' + rankBadge(cr.quality) + '</td>' +
+        '<td>' + rankBadge(cr.engagement) + '</td>' +
+        '<td>' + rankBadge(cr.conversion) + '</td>' +
+        '</tr>';
+    });
+  }
+
+  // Ad Set Status Chart (doughnut)
+  var asStatus = meta.adSetPerformance.statusBreakdown;
+  new Chart(document.getElementById('adSetStatusChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Active (' + asStatus.active.count + ')', 'Inactive (' + asStatus.inactive.count + ')', 'Not Delivering (' + asStatus.notDelivering.count + ')'],
+      datasets: [{
+        data: [asStatus.active.spend, asStatus.inactive.spend, asStatus.notDelivering.spend],
+        backgroundColor: [C.green, C.grayLight, C.orange],
+        borderWidth: 2
+      }]
+    },
+    options: {
+      responsive: true,
+      cutout: '55%',
+      plugins: {
+        legend: { position: 'bottom' },
+        tooltip: { callbacks: { label: function(ctx) { return ctx.label + ': ' + fmtINR(ctx.raw) + ' spend'; } } }
+      }
+    }
+  });
+
+  // Active Ad Sets Table
+  var aaBody = document.querySelector('#activeAdSetsTable tbody');
+  if (aaBody && meta.adSetPerformance.activeAdSets) {
+    aaBody.innerHTML = '';
+    meta.adSetPerformance.activeAdSets.forEach(function(a) {
+      var roasClass = a.roas >= 3 ? 'text-green' : (a.roas >= 2 ? '' : 'text-red');
+      aaBody.innerHTML += '<tr>' +
+        '<td>' + a.name + '</td>' +
+        '<td class="text-right">' + fmtINR(a.spend) + '</td>' +
+        '<td class="text-right">' + a.purchases + '</td>' +
+        '<td class="text-right ' + roasClass + ' font-bold">' + a.roas + 'x</td>' +
+        '</tr>';
+    });
+  }
+
+  // Best/Worst Ad Sets Tables
+  fillROASTable('bestAdSetsTable', meta.adSetPerformance.bestROASAdSets, 'text-green');
+  fillROASTable('worstAdSetsTable', meta.adSetPerformance.worstROASAdSets, 'text-red');
+}
+
+function fillROASTable(tableId, items, colorClass) {
+  var body = document.querySelector('#' + tableId + ' tbody');
+  if (!body || !items) return;
+  body.innerHTML = '';
+  items.forEach(function(c) {
+    body.innerHTML += '<tr>' +
+      '<td>' + c.name + '</td>' +
+      '<td class="text-right ' + colorClass + ' font-bold">' + c.roas + 'x</td>' +
+      '<td class="text-right">' + fmtINR(c.spend) + '</td>' +
+      '<td class="text-right">' + fmtINR(c.cpa || (c.spend / Math.max(c.purchases, 1))) + '</td>' +
+      '</tr>';
   });
 }
 

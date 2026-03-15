@@ -603,9 +603,10 @@
   <section id="sec-marketing" class="section">
     <div class="section-header">
       <h1>Marketing</h1>
-      <p>Ad spend efficiency, ROAS, and acquisition cost — FY 2025-26</p>
+      <p>Meta Ads deep-dive: campaign, demographic, creative & ad set analysis — Apr 2025 – Mar 2026</p>
     </div>
 
+    <!-- Row 1: Core KPIs -->
     <div class="kpi-grid">
       <div class="kpi-card kpi-danger">
         <div class="kpi-label">Tally Ad Expense</div>
@@ -613,26 +614,51 @@
         <div class="kpi-sub" id="kpi-tallyAdSpendSub">—</div>
       </div>
       <div class="kpi-card">
+        <div class="kpi-label">Meta Ad Spend</div>
+        <div class="kpi-value" id="kpi-metaSpend">—</div>
+        <div class="kpi-sub" id="kpi-metaSpendSub">—</div>
+      </div>
+      <div class="kpi-card kpi-warning">
+        <div class="kpi-label">ROAS (Tally-based)</div>
+        <div class="kpi-value text-orange" id="kpi-roas">—</div>
+        <div class="kpi-sub" id="kpi-roasSub">—</div>
+      </div>
+      <div class="kpi-card kpi-highlight">
+        <div class="kpi-label">ROAS (Meta-reported)</div>
+        <div class="kpi-value" id="kpi-metaROAS">—</div>
+        <div class="kpi-sub" id="kpi-metaROASSub">—</div>
+      </div>
+    </div>
+
+    <!-- Row 2: Meta KPIs -->
+    <div class="kpi-grid">
+      <div class="kpi-card">
         <div class="kpi-label">Purchases (Meta)</div>
         <div class="kpi-value" id="kpi-purchases">—</div>
         <div class="kpi-sub" id="kpi-purchasesSub">—</div>
       </div>
-      <div class="kpi-card kpi-warning">
-        <div class="kpi-label">ROAS (Tally)</div>
-        <div class="kpi-value text-orange" id="kpi-roas">—</div>
-        <div class="kpi-sub" id="kpi-roasSub">—</div>
+      <div class="kpi-card">
+        <div class="kpi-label">Avg CPA</div>
+        <div class="kpi-value" id="kpi-avgCPA">—</div>
+        <div class="kpi-sub" id="kpi-avgCPASub">—</div>
       </div>
-      <div class="kpi-card kpi-danger">
-        <div class="kpi-label">Meta Report Spend</div>
-        <div class="kpi-value text-red" id="kpi-metaSpend">—</div>
-        <div class="kpi-sub" id="kpi-metaSpendSub">—</div>
+      <div class="kpi-card">
+        <div class="kpi-label">Total Reach</div>
+        <div class="kpi-value" id="kpi-totalReach">—</div>
+        <div class="kpi-sub" id="kpi-totalReachSub">—</div>
+      </div>
+      <div class="kpi-card kpi-warning">
+        <div class="kpi-label">Active Campaigns</div>
+        <div class="kpi-value" id="kpi-activeCampaigns">—</div>
+        <div class="kpi-sub" id="kpi-activeCampaignsSub">—</div>
       </div>
     </div>
 
+    <!-- Row 3: Benchmark & Spend Source Charts -->
     <div class="chart-grid">
       <div class="chart-card">
         <div class="chart-title">ROAS Benchmark</div>
-        <div class="chart-subtitle">Your ROAS vs industry standard</div>
+        <div class="chart-subtitle">Tally vs Meta vs Industry standard</div>
         <canvas id="roasChart"></canvas>
       </div>
       <div class="chart-card">
@@ -642,15 +668,157 @@
       </div>
     </div>
 
+    <!-- Row 4: Campaign Type Performance -->
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Campaign Type — Spend & Purchases</div>
+        <div class="chart-subtitle">ABO vs CBO vs AS+ vs Others</div>
+        <canvas id="campTypeChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Campaign Type — ROAS & CPA</div>
+        <div class="chart-subtitle">Efficiency comparison by campaign strategy</div>
+        <canvas id="campTypeROASChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Row 5: Top Campaigns Table -->
+    <div class="chart-card" style="margin-bottom:1.5rem;">
+      <div class="chart-title">Top 15 Campaigns by Spend</div>
+      <div class="chart-subtitle">Ranked by total spend with key performance metrics</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="topCampaignsTable">
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th>Type</th>
+              <th>Spend</th>
+              <th>Purchases</th>
+              <th>ROAS</th>
+              <th>CPA</th>
+              <th>CTR</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Row 6: Best/Worst ROAS -->
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">🏆 Best ROAS Campaigns</div>
+        <div class="chart-subtitle">Min spend ₹10K — top efficiency</div>
+        <table class="data-table" id="bestROASTable">
+          <thead><tr><th>Campaign</th><th>ROAS</th><th>Spend</th><th>CPA</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">⚠ Worst ROAS Campaigns</div>
+        <div class="chart-subtitle">Min spend ₹10K — needs optimization</div>
+        <table class="data-table" id="worstROASTable">
+          <thead><tr><th>Campaign</th><th>ROAS</th><th>Spend</th><th>CPA</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Row 7: Demographics -->
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Demographics — Age Breakdown</div>
+        <div class="chart-subtitle">Spend, purchases & CPA by age group</div>
+        <canvas id="ageChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Demographics — Gender Split</div>
+        <div class="chart-subtitle">Spend distribution & conversion efficiency</div>
+        <canvas id="genderChart"></canvas>
+      </div>
+    </div>
+
+    <!-- Row 8: Top Demographic Segments -->
+    <div class="chart-card" style="margin-bottom:1.5rem;">
+      <div class="chart-title">Top Demographic Segments</div>
+      <div class="chart-subtitle">Age × Gender — highest converting audiences</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="demoSegmentsTable">
+          <thead><tr><th>Segment</th><th>Spend</th><th>% of Total</th><th>Purchases</th><th>CPA</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Row 9: Creative Performance -->
+    <div class="chart-card" style="margin-bottom:1.5rem;">
+      <div class="chart-title">Top 10 Ad Creatives by Purchases</div>
+      <div class="chart-subtitle">Creative-level performance with quality rankings</div>
+      <div style="overflow-x:auto;">
+        <table class="data-table" id="topCreativesTable">
+          <thead>
+            <tr>
+              <th>Ad Creative</th>
+              <th>Purchases</th>
+              <th>Spend</th>
+              <th>ROAS</th>
+              <th>Quality</th>
+              <th>Engagement</th>
+              <th>Conversion</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Row 10: Ad Set Analysis -->
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">Ad Set Status Overview</div>
+        <div class="chart-subtitle">Active vs inactive vs not delivering</div>
+        <canvas id="adSetStatusChart"></canvas>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">Active Ad Sets — Performance</div>
+        <div class="chart-subtitle">Currently running ad sets ranked by spend</div>
+        <table class="data-table" id="activeAdSetsTable">
+          <thead><tr><th>Ad Set</th><th>Spend</th><th>Purch.</th><th>ROAS</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Row 11: Best/Worst Ad Sets -->
+    <div class="chart-grid">
+      <div class="chart-card">
+        <div class="chart-title">🏆 Best ROAS Ad Sets</div>
+        <div class="chart-subtitle">Min spend ₹5K — top performing audiences</div>
+        <table class="data-table" id="bestAdSetsTable">
+          <thead><tr><th>Ad Set</th><th>ROAS</th><th>Spend</th><th>CPA</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="chart-card">
+        <div class="chart-title">⚠ Worst ROAS Ad Sets</div>
+        <div class="chart-subtitle">Min spend ₹5K — underperforming audiences</div>
+        <table class="data-table" id="worstAdSetsTable">
+          <thead><tr><th>Ad Set</th><th>ROAS</th><th>Spend</th><th>CPA</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Advisory -->
     <div class="advisory-card border-red">
       <div class="advisory-icon red">💡</div>
       <div class="advisory-content">
-        <div class="advisory-label red">CFO Advisory — Marketing</div>
+        <div class="advisory-label red">CFO Advisory — Marketing & Meta Ads</div>
         <p id="marketing-advisory">—</p>
       </div>
     </div>
 
-    <div class="gap-note">
+    <div class="gap-note" id="marketing-gap-note" style="display:none;">
       <span class="gap-icon">⚠</span>
       <span><strong>Data Gap:</strong> <span id="marketing-dataGap">—</span></span>
     </div>

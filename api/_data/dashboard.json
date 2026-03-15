@@ -462,17 +462,24 @@
     "kpis": {
       "tallyAdSpend": "₹22.7L",
       "tallyAdSpendSub": "Advertising per Tally books",
-      "purchases": "3,229",
-      "purchasesSub": "Apr–Feb, 11 months",
+      "purchases": "3,336",
+      "purchasesSub": "Meta Ads report, Apr 2025–Mar 2026",
       "roas": "1.92x",
       "roasSub": "₹43.5L sales / ₹22.7L ads",
-      "metaSpend": "₹25.8L",
-      "metaSpendSub": "Apr–Feb (11 months)"
+      "metaSpend": "₹26.6L",
+      "metaSpendSub": "Across 130 campaigns",
+      "metaROAS": "2.51x",
+      "metaROASSub": "Meta-reported (₹65.0L / ₹25.9L)",
+      "avgCPA": "₹776",
+      "avgCPASub": "Across 3336 purchases",
+      "totalReach": "107.3L",
+      "totalReachSub": "CTR 1.77%, CPM ₹126"
     },
     "roasBenchmark": {
       "dioste": 1.92,
       "minimum": 3.0,
-      "industry": 3.5
+      "industry": 3.5,
+      "metaReported": 2.51
     },
     "adSpendGap": {
       "labels": [
@@ -486,8 +493,854 @@
         2583302
       ]
     },
-    "advisory": "Tally-based ROAS at <strong>1.92x is well below the 3x minimum</strong> for profitability. Tally books show ₹22.7L ad expense (incl. GST). Bank shows only ₹6.93L in direct Meta debits, while Meta's own report shows ₹25.8L (Apr–Feb, 11 months). AOV is ₹1,737. CBO campaigns outperform ABO by 32% — shift budget accordingly.",
-    "dataGap": "Meta Ads detailed data pending. To enable campaign-level insights, we need the following exports from Meta Ads Manager:<br><br><strong>1. Campaign Performance Report</strong> — Date range: Apr 2025 to present. Columns: Campaign Name, Campaign ID, Objective, Daily Spend, Impressions, Reach, Clicks (Link), CTR, CPM, CPC, Purchases, Purchase Value, ROAS.<br><strong>2. Ad Set Level Report</strong> — Same date range. Columns: Ad Set Name, Audience Type (Lookalike/Interest/Custom), Daily Spend, Results, Cost per Result, Frequency.<br><strong>3. Ad Creative Report</strong> — Columns: Ad Name, Format (Image/Video/Carousel), Spend, Engagement Rate, Purchases, ROAS.<br><strong>4. Audience Insights</strong> — Age, Gender, Location breakdown of purchasers.<br><br><em>Export path: Meta Ads Manager → Ads Reporting → Export → CSV. Select 'All columns' and date range Apr 1, 2025 to present.</em>"
+    "advisory": "Tally-based ROAS at <strong>1.92x is critically below the 3x minimum</strong> for profitability. However, Meta's own tracking shows <strong>2.51x ROAS</strong> — the gap suggests attribution leakage or GST inclusion in Tally figures.<br><br><strong>Key findings from Meta Ads deep-dive:</strong><br>• CBO campaigns deliver the best ROAS at <strong>3.04x</strong> (₹3.66L spend, 581 purchases) — shift more budget here<br>• \"Red long 2025\" is the star campaign: <strong>4.60x ROAS</strong>, 133 purchases at just ₹406 CPA<br>• <strong>93.8% of purchases come from women</strong> — male targeting at ₹1,018 CPA is 29% more expensive than female ₹789<br>• Age 18-24 has the lowest CPA (₹744) but 25-34 drives 49% of all purchases — both are sweet spots<br>• Top creative \"New Sales ad – Copy\" accounts for <strong>15.8% of all purchases</strong> (529) — creative concentration risk<br>• ₹75K spent on Traffic/Brand campaigns with zero direct conversions — evaluate brand lift<br>• Only 7 ad sets are currently active out of 213 total — consolidation is needed",
+    "dataGap": "",
+    "metaAds": {
+      "overview": {
+        "totalSpend": 2664189,
+        "totalSpendFormatted": "₹26.6L",
+        "purchaseSpend": 2589484,
+        "trafficSpend": 74705,
+        "totalPurchases": 3336,
+        "totalConvValue": 6504600,
+        "totalConvValueFormatted": "₹65.0L",
+        "overallROAS": 2.51,
+        "avgCPA": 776,
+        "totalReach": 10730552,
+        "totalImpressions": 21167643,
+        "totalClicks": 375099,
+        "overallCTR": 1.77,
+        "overallCPM": 126,
+        "totalCampaigns": 130,
+        "activeCampaigns": 3,
+        "period": "Apr 2025 – Mar 2026"
+      },
+      "campaignTypePerformance": {
+        "labels": [
+          "ABO",
+          "Other",
+          "CBO",
+          "AS+",
+          "Traffic/Brand"
+        ],
+        "spend": [
+          719388,
+          700538,
+          696452,
+          502311,
+          45501
+        ],
+        "purchases": [
+          806,
+          979,
+          877,
+          674,
+          0
+        ],
+        "roas": [
+          2.29,
+          2.67,
+          2.49,
+          2.49,
+          0.0
+        ],
+        "cpa": [
+          893,
+          716,
+          794,
+          745,
+          0
+        ]
+      },
+      "topCampaigns": [
+        {
+          "name": "ABO",
+          "spend": 584217,
+          "purchases": 686,
+          "roas": 2.4,
+          "cpa": 852,
+          "reach": 1317318,
+          "ctr": 2.27,
+          "type": "ABO"
+        },
+        {
+          "name": "AS",
+          "spend": 389442,
+          "purchases": 566,
+          "roas": 2.7,
+          "cpa": 688,
+          "reach": 656429,
+          "ctr": 3.62,
+          "type": "AS+"
+        },
+        {
+          "name": "CBO",
+          "spend": 366193,
+          "purchases": 581,
+          "roas": 3.04,
+          "cpa": 630,
+          "reach": 896849,
+          "ctr": 3.37,
+          "type": "CBO"
+        },
+        {
+          "name": "Winners",
+          "spend": 109931,
+          "purchases": 117,
+          "roas": 2.14,
+          "cpa": 940,
+          "reach": 755475,
+          "ctr": 1.68,
+          "type": "Other"
+        },
+        {
+          "name": "17/08/2024 - 2",
+          "spend": 69299,
+          "purchases": 86,
+          "roas": 2.37,
+          "cpa": 806,
+          "reach": 216839,
+          "ctr": 3.47,
+          "type": "Other"
+        },
+        {
+          "name": "17/7/2025",
+          "spend": 64885,
+          "purchases": 99,
+          "roas": 2.97,
+          "cpa": 655,
+          "reach": 221361,
+          "ctr": 3.31,
+          "type": "Other"
+        },
+        {
+          "name": "CBO - New Concept",
+          "spend": 63885,
+          "purchases": 74,
+          "roas": 2.33,
+          "cpa": 863,
+          "reach": 243059,
+          "ctr": 1.8,
+          "type": "CBO"
+        },
+        {
+          "name": "CBO-Sales",
+          "spend": 60094,
+          "purchases": 57,
+          "roas": 1.98,
+          "cpa": 1054,
+          "reach": 137362,
+          "ctr": 2.71,
+          "type": "CBO"
+        },
+        {
+          "name": "Gingham - Cost Cap",
+          "spend": 59591,
+          "purchases": 66,
+          "roas": 2.09,
+          "cpa": 903,
+          "reach": 167239,
+          "ctr": 1.88,
+          "type": "Other"
+        },
+        {
+          "name": "ABO - Sales",
+          "spend": 59220,
+          "purchases": 43,
+          "roas": 1.44,
+          "cpa": 1377,
+          "reach": 106069,
+          "ctr": 3.31,
+          "type": "ABO"
+        },
+        {
+          "name": "CBO - New Creative",
+          "spend": 58006,
+          "purchases": 45,
+          "roas": 1.82,
+          "cpa": 1289,
+          "reach": 282545,
+          "ctr": 2.21,
+          "type": "CBO"
+        },
+        {
+          "name": "Red long 2025",
+          "spend": 53961,
+          "purchases": 133,
+          "roas": 4.6,
+          "cpa": 406,
+          "reach": 144382,
+          "ctr": 4.34,
+          "type": "Other"
+        },
+        {
+          "name": "Pink - Campaigns - Old",
+          "spend": 45621,
+          "purchases": 72,
+          "roas": 3.15,
+          "cpa": 634,
+          "reach": 122545,
+          "ctr": 2.54,
+          "type": "Other"
+        },
+        {
+          "name": "New ABO",
+          "spend": 36756,
+          "purchases": 29,
+          "roas": 1.71,
+          "cpa": 1267,
+          "reach": 145174,
+          "ctr": 2.39,
+          "type": "ABO"
+        },
+        {
+          "name": "may 2 camp",
+          "spend": 33480,
+          "purchases": 45,
+          "roas": 2.59,
+          "cpa": 744,
+          "reach": 135936,
+          "ctr": 2.3,
+          "type": "Other"
+        }
+      ],
+      "bestROASCampaigns": [
+        {
+          "name": "Red long 2025",
+          "roas": 4.6,
+          "spend": 53961,
+          "purchases": 133,
+          "cpa": 406
+        },
+        {
+          "name": "Red Dress",
+          "roas": 4.07,
+          "spend": 13258,
+          "purchases": 31,
+          "cpa": 428
+        },
+        {
+          "name": "MB_Gingham_10July",
+          "roas": 4.0,
+          "spend": 15386,
+          "purchases": 32,
+          "cpa": 481
+        },
+        {
+          "name": "Red long 18 Jan  all product link",
+          "roas": 3.71,
+          "spend": 11638,
+          "purchases": 25,
+          "cpa": 466
+        },
+        {
+          "name": "Wine good 2nd bodycon dress 24feb",
+          "roas": 3.45,
+          "spend": 24017,
+          "purchases": 43,
+          "cpa": 559
+        }
+      ],
+      "worstROASCampaigns": [
+        {
+          "name": "CBO - Valentine Day",
+          "roas": 1.2,
+          "spend": 15079,
+          "purchases": 9,
+          "cpa": 1675
+        },
+        {
+          "name": "CBO-4",
+          "roas": 1.25,
+          "spend": 28780,
+          "purchases": 19,
+          "cpa": 1515
+        },
+        {
+          "name": "ABO - Sales",
+          "roas": 1.44,
+          "spend": 59220,
+          "purchases": 43,
+          "cpa": 1377
+        },
+        {
+          "name": "ASC",
+          "roas": 1.54,
+          "spend": 12007,
+          "purchases": 9,
+          "cpa": 1334
+        },
+        {
+          "name": "Old - ABO- Relaunch",
+          "roas": 1.6,
+          "spend": 13821,
+          "purchases": 12,
+          "cpa": 1152
+        }
+      ],
+      "demographics": {
+        "ageBreakdown": {
+          "labels": [
+            "25-34",
+            "18-24",
+            "35-44",
+            "45-54",
+            "55-64",
+            "65",
+            "Unknown"
+          ],
+          "spend": [
+            1261821,
+            644302,
+            606064,
+            140239,
+            14848,
+            8740,
+            30
+          ],
+          "purchases": [
+            1643,
+            866,
+            686,
+            134,
+            12,
+            5,
+            0
+          ],
+          "cpa": [
+            768,
+            744,
+            883,
+            1047,
+            1237,
+            1748,
+            0
+          ],
+          "atcConversion": [
+            21.4,
+            16.3,
+            19.1,
+            20.2,
+            16.7,
+            16.1,
+            0.0
+          ]
+        },
+        "genderBreakdown": {
+          "labels": [
+            "Female",
+            "Male",
+            "Unknown"
+          ],
+          "spend": [
+            2512687,
+            158748,
+            4610
+          ],
+          "purchases": [
+            3184,
+            156,
+            6
+          ],
+          "cpa": [
+            789,
+            1018,
+            768
+          ]
+        },
+        "topSegments": [
+          {
+            "age": "25-34",
+            "gender": "Female",
+            "spend": 1193009,
+            "spendPct": 44.6,
+            "purchases": 1567,
+            "cpa": 761
+          },
+          {
+            "age": "18-24",
+            "gender": "Female",
+            "spend": 590096,
+            "spendPct": 22.1,
+            "purchases": 803,
+            "cpa": 735
+          },
+          {
+            "age": "35-44",
+            "gender": "Female",
+            "spend": 578521,
+            "spendPct": 21.6,
+            "purchases": 670,
+            "cpa": 863
+          },
+          {
+            "age": "45-54",
+            "gender": "Female",
+            "spend": 130791,
+            "spendPct": 4.9,
+            "purchases": 129,
+            "cpa": 1014
+          },
+          {
+            "age": "25-34",
+            "gender": "Male",
+            "spend": 67437,
+            "spendPct": 2.5,
+            "purchases": 74,
+            "cpa": 911
+          },
+          {
+            "age": "18-24",
+            "gender": "Male",
+            "spend": 53103,
+            "spendPct": 2.0,
+            "purchases": 61,
+            "cpa": 871
+          },
+          {
+            "age": "35-44",
+            "gender": "Male",
+            "spend": 26326,
+            "spendPct": 1.0,
+            "purchases": 15,
+            "cpa": 1755
+          },
+          {
+            "age": "55-64",
+            "gender": "Female",
+            "spend": 12723,
+            "spendPct": 0.5,
+            "purchases": 10,
+            "cpa": 1272
+          }
+        ]
+      },
+      "creativePerformance": {
+        "topCreatives": [
+          {
+            "name": "New Sales ad – Copy",
+            "purchases": 529,
+            "spend": 328319,
+            "roas": 3.08,
+            "quality": "Above average",
+            "engagement": "Above average",
+            "conversion": "Average"
+          },
+          {
+            "name": "New Sales ad",
+            "purchases": 133,
+            "spend": 53961,
+            "roas": 4.6,
+            "quality": "-",
+            "engagement": "-",
+            "conversion": "-"
+          },
+          {
+            "name": "Pink Gingham_UGC | Video",
+            "purchases": 105,
+            "spend": 80533,
+            "roas": 2.66,
+            "quality": "-",
+            "engagement": "-",
+            "conversion": "-"
+          },
+          {
+            "name": "Flexi",
+            "purchases": 100,
+            "spend": 88562,
+            "roas": 2.27,
+            "quality": "-",
+            "engagement": "-",
+            "conversion": "-"
+          },
+          {
+            "name": "1",
+            "purchases": 92,
+            "spend": 59969,
+            "roas": 2.98,
+            "quality": "-",
+            "engagement": "-",
+            "conversion": "-"
+          },
+          {
+            "name": "Gingham Grace - NEW",
+            "purchases": 87,
+            "spend": 58302,
+            "roas": 2.87,
+            "quality": "Average",
+            "engagement": "Above average",
+            "conversion": "Average"
+          },
+          {
+            "name": "Pink Gingham Grace dress - 2",
+            "purchases": 84,
+            "spend": 52213,
+            "roas": 2.98,
+            "quality": "Average",
+            "engagement": "Above average",
+            "conversion": "Average"
+          },
+          {
+            "name": "New Sales ad",
+            "purchases": 81,
+            "spend": 63503,
+            "roas": 2.44,
+            "quality": "-",
+            "engagement": "-",
+            "conversion": "-"
+          },
+          {
+            "name": "Ad 1 - Gingham",
+            "purchases": 72,
+            "spend": 61848,
+            "roas": 2.34,
+            "quality": "Above average",
+            "engagement": "Above average",
+            "conversion": "Average"
+          },
+          {
+            "name": "New Sales ad",
+            "purchases": 72,
+            "spend": 45621,
+            "roas": 3.15,
+            "quality": "-",
+            "engagement": "-",
+            "conversion": "-"
+          }
+        ],
+        "qualityRanking": {
+          "labels": [
+            "-",
+            "Above average",
+            "Average"
+          ],
+          "spend": [
+            1203022,
+            438976,
+            140066
+          ],
+          "purchases": [
+            1495,
+            665,
+            200
+          ],
+          "cpa": [
+            805,
+            660,
+            700
+          ]
+        }
+      },
+      "adSetPerformance": {
+        "topAdSets": [
+          {
+            "name": "AS || Open ( W)",
+            "status": "not_delivering",
+            "spend": 389442,
+            "purchases": 566,
+            "roas": 2.7,
+            "reach": 656429,
+            "frequency": 2.4
+          },
+          {
+            "name": "Adset-1 || LLA's || Old - MOF",
+            "status": "active",
+            "spend": 366193,
+            "purchases": 581,
+            "roas": 3.04,
+            "reach": 896849,
+            "frequency": 2.5
+          },
+          {
+            "name": "Reel || Open || Top 2",
+            "status": "not_delivering",
+            "spend": 109931,
+            "purchases": 117,
+            "roas": 2.14,
+            "reach": 755475,
+            "frequency": 1.9
+          },
+          {
+            "name": "Adset -1 (Relaunched Test ) - Tem paused",
+            "status": "inactive",
+            "spend": 106710,
+            "purchases": 130,
+            "roas": 2.45,
+            "reach": 256830,
+            "frequency": 2.2
+          },
+          {
+            "name": "Top 2 creatives || Open",
+            "status": "active",
+            "spend": 74805,
+            "purchases": 120,
+            "roas": 3.38,
+            "reach": 239597,
+            "frequency": 2.2
+          },
+          {
+            "name": "Blue Breeze Shirt || 18-65+ (W)",
+            "status": "inactive",
+            "spend": 74107,
+            "purchases": 100,
+            "roas": 2.75,
+            "reach": 251850,
+            "frequency": 2.2
+          },
+          {
+            "name": "New Sales ad set",
+            "status": "inactive",
+            "spend": 69299,
+            "purchases": 86,
+            "roas": 2.37,
+            "reach": 216839,
+            "frequency": 1.5
+          },
+          {
+            "name": "New Sales ad set",
+            "status": "not_delivering",
+            "spend": 64885,
+            "purchases": 99,
+            "roas": 2.97,
+            "reach": 221361,
+            "frequency": 1.6
+          },
+          {
+            "name": "Adset || Existing audiences+",
+            "status": "not_delivering",
+            "spend": 63885,
+            "purchases": 74,
+            "roas": 2.33,
+            "reach": 243059,
+            "frequency": 1.9
+          },
+          {
+            "name": "New Sales ad set",
+            "status": "not_delivering",
+            "spend": 59591,
+            "purchases": 66,
+            "roas": 2.09,
+            "reach": 167239,
+            "frequency": 2.3
+          },
+          {
+            "name": "Reel || Open",
+            "status": "not_delivering",
+            "spend": 58006,
+            "purchases": 45,
+            "roas": 1.82,
+            "reach": 282545,
+            "frequency": 1.8
+          },
+          {
+            "name": "New Sales ad set",
+            "status": "not_delivering",
+            "spend": 53961,
+            "purchases": 133,
+            "roas": 4.6,
+            "reach": 144382,
+            "frequency": 2.0
+          },
+          {
+            "name": "Adset - 1 || Int || 18-34 (W) || Automated Rules",
+            "status": "not_delivering",
+            "spend": 45621,
+            "purchases": 72,
+            "roas": 3.15,
+            "reach": 122545,
+            "frequency": 2.2
+          },
+          {
+            "name": "Cherry Blossom || 18-45 (W)",
+            "status": "inactive",
+            "spend": 41691,
+            "purchases": 51,
+            "roas": 2.85,
+            "reach": 296613,
+            "frequency": 1.8
+          },
+          {
+            "name": "Int || Tier 1,2 || 18- 35 || Insta",
+            "status": "active",
+            "spend": 35462,
+            "purchases": 74,
+            "roas": 4.13,
+            "reach": 84979,
+            "frequency": 1.9
+          },
+          {
+            "name": "New Sales ad set",
+            "status": "not_delivering",
+            "spend": 33480,
+            "purchases": 45,
+            "roas": 2.59,
+            "reach": 135936,
+            "frequency": 1.5
+          },
+          {
+            "name": "Red Gingham || 18-45 (W) || Exclusion",
+            "status": "inactive",
+            "spend": 32343,
+            "purchases": 39,
+            "roas": 2.18,
+            "reach": 69554,
+            "frequency": 1.4
+          },
+          {
+            "name": "Broad || W",
+            "status": "inactive",
+            "spend": 30040,
+            "purchases": 32,
+            "roas": 2.0,
+            "reach": 80348,
+            "frequency": 1.6
+          },
+          {
+            "name": "Open || Exclusion",
+            "status": "not_delivering",
+            "spend": 28780,
+            "purchases": 19,
+            "roas": 1.25,
+            "reach": 143767,
+            "frequency": 1.6
+          },
+          {
+            "name": "Open",
+            "status": "not_delivering",
+            "spend": 28576,
+            "purchases": 46,
+            "roas": 3.03,
+            "reach": 114242,
+            "frequency": 1.6
+          }
+        ],
+        "activeAdSets": [
+          {
+            "name": "Adset-1 || LLA's || Old - MOF",
+            "spend": 366193,
+            "purchases": 581,
+            "roas": 3.04
+          },
+          {
+            "name": "Top 2 creatives || Open",
+            "spend": 74805,
+            "purchases": 120,
+            "roas": 3.38
+          },
+          {
+            "name": "Int || Tier 1,2 || 18- 35 || Insta",
+            "spend": 35462,
+            "purchases": 74,
+            "roas": 4.13
+          },
+          {
+            "name": "Open || Exclusion || PINK PUFF Long",
+            "spend": 8013,
+            "purchases": 13,
+            "roas": 3.94
+          },
+          {
+            "name": "Open || Exclusion || Blue Breeze",
+            "spend": 7724,
+            "purchases": 8,
+            "roas": 1.9
+          },
+          {
+            "name": "Int || Tier 1,2 || Exclusion || 18-44 - Relaunch",
+            "spend": 3654,
+            "purchases": 7,
+            "roas": 3.78
+          },
+          {
+            "name": "Int || Tier 1,2 || Exclusion || 18 - 45 (W) || Offer",
+            "spend": 3225,
+            "purchases": 1,
+            "roas": 0.59
+          }
+        ],
+        "bestROASAdSets": [
+          {
+            "name": "New Sales ad set",
+            "roas": 4.6,
+            "spend": 53961,
+            "purchases": 133
+          },
+          {
+            "name": "MB_Margot_3July",
+            "roas": 4.17,
+            "spend": 7496,
+            "purchases": 16
+          },
+          {
+            "name": "Intrest Base",
+            "roas": 4.16,
+            "spend": 12974,
+            "purchases": 31
+          },
+          {
+            "name": "Int || Tier 1,2 || 18- 35 || Insta",
+            "roas": 4.13,
+            "spend": 35462,
+            "purchases": 74
+          },
+          {
+            "name": "MB_Gingham_10July",
+            "roas": 4.0,
+            "spend": 15386,
+            "purchases": 32
+          }
+        ],
+        "worstROASAdSets": [
+          {
+            "name": "Adset-1 || 18 - 45 (W) - Baby Tee",
+            "roas": 0.61,
+            "spend": 5767,
+            "purchases": 2
+          },
+          {
+            "name": "AS || Open ( W)",
+            "roas": 0.81,
+            "spend": 8808,
+            "purchases": 3
+          },
+          {
+            "name": "Open || exclusion ||",
+            "roas": 0.91,
+            "spend": 5951,
+            "purchases": 3
+          },
+          {
+            "name": "Open || Reel",
+            "roas": 1.0,
+            "spend": 23021,
+            "purchases": 12
+          },
+          {
+            "name": "Mixed || 18-45 (W) || Exclusion",
+            "roas": 1.1,
+            "spend": 10036,
+            "purchases": 6
+          }
+        ],
+        "statusBreakdown": {
+          "active": {
+            "count": 7,
+            "spend": 499075,
+            "purchases": 804
+          },
+          "inactive": {
+            "count": 57,
+            "spend": 680296,
+            "purchases": 677
+          },
+          "notDelivering": {
+            "count": 149,
+            "spend": 1496673,
+            "purchases": 1865
+          }
+        }
+      }
+    }
   },
   "customers": {
     "kpis": {
@@ -971,6 +1824,90 @@
         "Launch simple loyalty program with points on repeat purchases",
         "Target 15% repeat rate within 6 months — worth ₹5–8L incremental revenue"
       ]
+    },
+    {
+      "number": 9,
+      "title": "Creative Concentration Risk",
+      "severity": "CRITICAL",
+      "borderColor": "red",
+      "body": "A single ad creative (\"New Sales ad – Copy\") drives <strong>15.8% of all purchases</strong> (529 out of 3,346). If this creative fatigues, revenue could drop significantly.",
+      "actions": [
+        "Develop 3-4 new high-quality creatives immediately to diversify",
+        "Test UGC (user-generated content) creatives — Pink Gingham UGC already shows 105 purchases",
+        "Monitor frequency of 'New Sales ad' closely — pause if above 3.5"
+      ]
+    },
+    {
+      "number": 10,
+      "title": "CBO Outperforms — Scale Budget",
+      "severity": "WARNING",
+      "borderColor": "green",
+      "body": "CBO campaigns deliver <strong>3.04x ROAS</strong> vs ABO at 2.40x — a 27% advantage. CBO also has the lowest CPA at ₹630 vs ABO's ₹852.",
+      "actions": [
+        "Shift 30-40% of ABO budget (currently ₹5.84L) to CBO campaigns",
+        "Test CBO with winning ABO ad sets to combine advantages",
+        "'Red long 2025' achieves 4.60x ROAS — analyze and replicate its strategy"
+      ]
+    },
+    {
+      "number": 11,
+      "title": "Male Targeting Inefficient",
+      "severity": "WARNING",
+      "borderColor": "orange",
+      "body": "Male audiences cost <strong>29% more per purchase</strong> (₹1,018 vs ₹789 for females) and account for only 4.7% of purchases. ₹1.59L spent on male targeting with just 156 conversions.",
+      "actions": [
+        "Reduce male-targeted spend by 50% and reallocate to female 18-34 segment",
+        "If retaining male campaigns, create male-specific creatives rather than showing women's dress ads",
+        "Focus budget on the sweet spot: Female 25-34 (49% of purchases, ₹761 CPA)"
+      ]
+    },
+    {
+      "number": 12,
+      "title": "₹75K Traffic Spend — Zero Conversions",
+      "severity": "WARNING",
+      "borderColor": "orange",
+      "body": "Traffic, Hype, and Brand campaigns spent <strong>₹74,705 with zero tracked purchases</strong>. This represents 2.8% of total spend with no measurable ROI.",
+      "actions": [
+        "Pause all Traffic/Brand campaigns until Meta pixel attribution is verified",
+        "If brand awareness is needed, cap at ₹25K/month maximum",
+        "Use conversion campaigns with broad targeting instead — they build awareness AND drive purchases"
+      ]
+    },
+    {
+      "number": 13,
+      "title": "Ad Set Consolidation Needed",
+      "severity": "WARNING",
+      "borderColor": "orange",
+      "body": "Only <strong>7 out of 213 ad sets</strong> are currently active. Active sets show ₹621 CPA vs ₹803 for paused sets — the best performers survived. But consolidation is overdue.",
+      "actions": [
+        "Archive all 149 'not delivering' ad sets to clean up the account",
+        "Scale the top active ad set 'Adset-1 || LLA's' (₹3.66L, 3.04x ROAS, ₹630 CPA)",
+        "Test the proven ad set 'Int || Tier 1,2 || 18-35' (4.13x ROAS) with more budget"
+      ]
+    },
+    {
+      "number": 14,
+      "title": "Age 18-24 — Best CPA, Low Checkout Conversion",
+      "severity": "INFO",
+      "borderColor": "blue",
+      "body": "18-24 year olds have the <strong>lowest CPA (₹744)</strong> but worst Add-to-Cart to Purchase conversion (16.3% vs 21.4% for 25-34). They're interested but not completing checkout.",
+      "actions": [
+        "Simplify checkout flow — reduce steps for mobile users (likely 18-24 demographic)",
+        "Add COD (Cash on Delivery) prominently — younger buyers may hesitate with online payment",
+        "Test offering first-order discount or free shipping to push 18-24 conversions"
+      ]
+    },
+    {
+      "number": 15,
+      "title": "Star Campaign: Red Long 2025",
+      "severity": "INFO",
+      "borderColor": "green",
+      "body": "\"Red long 2025\" campaign achieves <strong>4.60x ROAS</strong> with 133 purchases at ₹406 CPA — the best efficiency across all campaigns. This is the gold standard to replicate.",
+      "actions": [
+        "Analyze the targeting, creative, and audience of this campaign",
+        "Create similar campaigns for other top products (Gingham Grace, Wine Dress)",
+        "Gradually scale spend — test at ₹75K first before pushing to ₹1L+"
+      ]
     }
   ],
   "dataStatus": {
@@ -984,7 +1921,11 @@
       "Meta Ads Report (aggregate)",
       "Tally P&L Statement",
       "Tally Bills Payable",
-      "Bank Statement (Apr 2025 – Jan 2026)"
+      "Bank Statement (Apr 2025 – Jan 2026)",
+      "Meta Ads — Campaign Performance Report (130 campaigns, Apr 2025–Mar 2026)",
+      "Meta Ads — Ad Set Report (213 ad sets with targeting & frequency data)",
+      "Meta Ads — Ad Creative Report (271 ads with quality rankings)",
+      "Meta Ads — Demographic Report (1,697 rows: age × gender × campaign)"
     ],
     "pending": [
       "Customers Export (for cohort & LTV)",
@@ -992,10 +1933,6 @@
       "Refunds Export (Shopify)",
       "Shiprocket RTO Report",
       "COGS per Product (manual input)",
-      "Meta Ads — Campaign Performance Report (daily spend, ROAS, purchases by campaign)",
-      "Meta Ads — Ad Set Report (audience targeting, frequency, cost per result)",
-      "Meta Ads — Ad Creative Report (format, engagement, ROAS per ad)",
-      "Meta Ads — Audience Insights (age, gender, location of purchasers)",
       "Conversion Funnel Data"
     ]
   }
